@@ -7,19 +7,12 @@ public class Database {
 
     private Connection connection;
 
-    // For Amazon Postgresql
-    // private final String host = "ssprojectinstance.csv2nbvvgbcb.us-east-2.rds.amazonaws.com"
-
-    // For Google Cloud Postgresql
-    // private final String host = "35.44.16.169";
-
-    // For Local PostgreSQL
     private final String host = "10.0.2.2";
 
     private final String database = "test1";
     private final int port = 5432;
     private final String user = "postgres";
-    private final String pass = "1234";
+    private final String pass = "4116";
     private String url = "jdbc:postgresql://%s:%d/%s";
     private boolean status;
 
@@ -62,6 +55,10 @@ public class Database {
             e.printStackTrace();
             this.status = false;
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     public Connection getExtraConnection()
