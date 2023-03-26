@@ -12,7 +12,7 @@ public class Database {
     private final String database = "test1";
     private final int port = 5432;
     private final String user = "postgres";
-    private final String pass = "4116";
+    private final String pass = "BezoutStudent02#";
     private String url = "jdbc:postgresql://%s:%d/%s";
     private boolean status;
 

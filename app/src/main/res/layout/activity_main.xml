@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <ScrollView
@@ -16,8 +16,9 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/filters"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -39,7 +40,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="test"
-                        android:text="Button" />
+                        android:text="Search" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -70,7 +71,7 @@
                 <LinearLayout
                     android:id="@+id/priceLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <EditText
@@ -96,6 +97,32 @@
                         android:textAlignment="center"
                         android:textStyle="italic" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/revealLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/revealBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="hideFilters"
+                    android:text="hide filters" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hotelList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>
