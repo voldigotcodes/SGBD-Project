@@ -9,7 +9,7 @@ public class Database {
 
     private final String host = "10.0.2.2";
 
-    private final String database = "test1";
+    private final String database = "postgres";
     private final int port = 5432;
     private final String user = "postgres";
     private final String pass = "BezoutStudent02#";
