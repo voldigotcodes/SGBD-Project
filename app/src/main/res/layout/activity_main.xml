@@ -46,7 +46,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editTextDate2"
+                    android:id="@+id/editTextArrival"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -55,7 +55,7 @@
                     android:inputType="date" />
 
                 <EditText
-                    android:id="@+id/editTextDate3"
+                    android:id="@+id/editTextDep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
