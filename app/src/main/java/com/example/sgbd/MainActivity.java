@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public static String getMax(){
         String maximum = max.getText().toString(); // get the text entered by the user as a String
         if (maximum.isEmpty()) {
-            maximum = "0"; // set a default value if the EditText is empty
+            maximum = "999999999"; // set a default value if the EditText is empty
         }
         return maximum;
     }
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     public static String getDeparture(){
         String depart = dep.getText().toString(); // get the text entered by the user as a String
         if (depart.isEmpty()) {
-            depart = "0000-00-00"; // set a default value if the EditText is empty
+            depart = "9999-12-31"; // set a default value if the EditText is empty
         }
         return depart;
     }
@@ -148,23 +148,29 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         ResultSet resultSet = null;
         String price = null;
         String date = null;
+        String capacity = null;
+        String sup = null;
+        String chaine = null;
+        String category = null;
+        String nombreChambre = null;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query;
-        String table = "test";
+
 
         //the search query for arrival and departure have to be changed
-        if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){
-            price = " salary >="+MainActivity.getMin() + "AND salary <=" + MainActivity.getMax();
+        if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){// checks if the min is less than the max
+            price = " prix >="+MainActivity.getMin() + "AND prix <=" + MainActivity.getMax();
         }
         try {
-            if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){
-                date = " id BETWEEN "+MainActivity.getArrival() +" AND "+ MainActivity.getDeparture();
+            if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
+                date = " SELECT numero_chambre FROM location" +
+                        "WHERE arrive >= "+MainActivity.getArrival() +" AND depart <="+ MainActivity.getDeparture();
             }
         }
         catch(Exception e){
             System.out.print("wrong date format");
         }
-        query = "SELECT * FROM "+table+"\n"+
+        query = "SELECT * FROM chambre"+"\n"+
                 "WHERE " + price + " AND " + date;
 
 
@@ -187,11 +193,14 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                int age = resultSet.getInt("age");
-                int salary = resultSet.getInt("salary");
-                dataList.add(new Test(id, name, age, salary));
+                double prix = resultSet.getDouble("prix");
+                int cap = resultSet.getInt("capacite");
+                double superficie = resultSet.getDouble("superficie");
+                String cat = resultSet.getString("category");
+                String ch = resultSet.getString("chaine");
+                String nChambre = resultSet.getString("nombreDeChambres");
+
+                dataList.add(new Test(prix, cap, superficie, cat, ch, nChambre ));
             }
         } catch (SQLException e) {
             e.printStackTrace();

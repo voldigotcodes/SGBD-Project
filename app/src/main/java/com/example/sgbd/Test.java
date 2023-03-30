@@ -6,49 +6,70 @@ import android.os.Bundle;
 
 public class Test {
 
-    int id;
-    String name;
-    int age;
-    float salary;
+    double prix;
+    double sup;
+    int cap;
+    String cat;
+    String chaine;
+    String numCh;
 
     public Test(){}
 
-    public Test(int id, String name, int age, float salary) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.salary = salary;
+    public Test(double prix, int cap, double sup, String cat, String chaine, String numCh) {
+        this.prix = prix;
+        this.sup = sup;
+        this.cap = cap;
+        this.cat = cat;
+        this.chaine = chaine;
+        this.numCh = numCh;
     }
 
-    public int getId() {
-        return id;
+    public double getPrix() {
+        return prix;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPrix(double prix) {
+        this.prix = prix;
     }
 
-    public String getName() {
-        return name;
+    public int getCap() {
+        return cap;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCap(int cap) {
+        this.cap = cap;
     }
 
-    public int getAge() {
-        return age;
+    public double getSup() {
+        return sup;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setSup(double sup) {
+        this.sup = sup;
     }
 
-    public float getSalary() {
-        return salary;
+    public String getCat() {
+        return cat;
     }
 
-    public void setSalary(float salary) {
-        this.salary = salary;
+    public void setCat(String cat) {
+        this.cat = cat;
     }
+
+    public String getChaine() {
+        return chaine;
+    }
+
+    public void setChaine(String chaine) {
+        this.chaine = chaine;
+    }
+
+    public String getNumCh() {
+        return numCh;
+    }
+
+    public void setNumCh(String numCh) {
+        this.numCh = numCh;
+    }
+
 }
