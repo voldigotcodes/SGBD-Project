@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
     private List<Test> mDataList;
+    private String table = "test";
 
     public DatabaseTask(List<Test> dataList) {
         mDataList = dataList;
@@ -142,15 +143,20 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
         //the search query for arrival and departure have to be changed
         if(MainActivity.getMin().equals("0")&&MainActivity.getMax().equals("0")){ //when there is no min and max entered
-            query = "SELECT * FROM testtable1\n"+
+            query = "SELECT * FROM "+table+"\n"+
                     "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture();
         }
         else if(MainActivity.getArrival().equals("0")&&MainActivity.getDeparture().equals("0")){ //when there is no arrival and departure entered
-            query = "SELECT * FROM testtable1\n"+
-                    "WHERE salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
+            if(Integer.parseInt(MainActivity.getMax())>=Integer.parseInt(MainActivity.getMin())){
+                query = "SELECT * FROM "+table+"\n"+
+                        "WHERE salary > "+MainActivity.getMin() + "AND salary < " + MainActivity.getMax();
+            }else{
+                query = "SELECT * FROM "+table+"\n"+
+                        "WHERE salary > "+MainActivity.getMin();
+            }
         }
         else{ //uses both type of search method
-            query = "SELECT * FROM testtable1\n"+
+            query = "SELECT * FROM "+table+"\n"+
                     "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture()+"\n"+
                     "AND salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
         }
