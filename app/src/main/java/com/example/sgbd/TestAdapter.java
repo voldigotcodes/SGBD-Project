@@ -3,7 +3,6 @@ package com.example.sgbd;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,9 +28,11 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
     @Override
     public void onBindViewHolder(@NonNull TestViewHolder holder, int position) {
         Test test = mTests.get(position);
-        holder.nameTextView.setText(test.getName());
-        holder.ageTextView.setText(String.valueOf(test.getAge()));
-        holder.salaryTextView.setText(String.valueOf(test.getSalary()));
+
+        holder.price.setText(String.valueOf(test.getPrix()));
+        holder.capacity.setText(String.valueOf(test.getCap()));
+        holder.area.setText(String.valueOf(String.valueOf(test.getSup())));
+
     }
 
     @Override
@@ -44,15 +45,15 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
     public static class TestViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView nameTextView;
-        public TextView ageTextView;
-        public TextView salaryTextView;
+        public TextView price;
+        public TextView capacity;
+        public TextView area;
 
         public TestViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.nameTextView);
-            ageTextView = itemView.findViewById(R.id.ageTextView);
-            salaryTextView = itemView.findViewById(R.id.salaryTextView);
+            price = itemView.findViewById(R.id.price);
+            capacity = itemView.findViewById(R.id.capacity);
+            area = itemView.findViewById(R.id.area);
         }
     }
 

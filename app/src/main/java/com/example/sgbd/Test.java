@@ -15,13 +15,12 @@ public class Test {
 
     public Test(){}
 
-    public Test(double prix, int cap, double sup, String cat, String chaine, String numCh) {
+    public Test(double prix, int cap, double sup) {
         this.prix = prix;
         this.sup = sup;
         this.cap = cap;
-        this.cat = cat;
-        this.chaine = chaine;
-        this.numCh = numCh;
+
+
     }
 
     public double getPrix() {

@@ -20,6 +20,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -85,24 +87,25 @@ public class EmployeeActivity extends AppCompatActivity {
     public static String getMax(){
         String maximum = max.getText().toString(); // get the text entered by the user as a String
         if (maximum.isEmpty()) {
-            maximum = "0"; // set a default value if the EditText is empty
+            maximum = "999999999"; // set a default value if the EditText is empty
         }
         return maximum;
     }
     public static String getArrival(){
         String arrival = arriv.getText().toString(); // get the text entered by the user as a String
         if (arrival.isEmpty()) {
-            arrival = "0"; // set a default value if the EditText is empty
+            arrival = "0000-00-00"; // set a default value if the EditText is empty
         }
         return arrival;
     }
     public static String getDeparture(){
         String depart = dep.getText().toString(); // get the text entered by the user as a String
         if (depart.isEmpty()) {
-            depart = "0"; // set a default value if the EditText is empty
+            depart = "9999-12-31"; // set a default value if the EditText is empty
         }
         return depart;
     }
+
 
 
 
@@ -129,7 +132,6 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         mDataList = dataList;
     }
 
-    @Override
     protected List<Test> doInBackground(Void... voids) {
         List<Test> dataList = new ArrayList<>();
 
@@ -137,39 +139,46 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
+        String price = null;
+        String date = null;
+        String capacity = null;
+        String sup = null;
+        String chaine = null;
+        String category = null;
+        String nombreChambre = null;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query;
+        String inJoin = "INNER JOIN";
 
         //the search query for arrival and departure have to be changed
-        if(MainActivity.getMin().equals("0")&&MainActivity.getMax().equals("0")){ //when there is no min and max entered
-            query = "SELECT * FROM "+table+"\n"+
-                    "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture();
+        if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){// checks if the min is less than the max
+            price = " prix >="+MainActivity.getMin() + "AND prix <=" + MainActivity.getMax();
         }
-        else if(MainActivity.getArrival().equals("0")&&MainActivity.getDeparture().equals("0")){ //when there is no arrival and departure entered
-            if(Integer.parseInt(MainActivity.getMax())>=Integer.parseInt(MainActivity.getMin())){
-                query = "SELECT * FROM "+table+"\n"+
-                        "WHERE salary > "+MainActivity.getMin() + "AND salary < " + MainActivity.getMax();
-            }else{
-                query = "SELECT * FROM "+table+"\n"+
-                        "WHERE salary > "+MainActivity.getMin();
+        try {
+            if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
+                date = " arrive >= '"+MainActivity.getArrival() +"' AND depart <= '"+ MainActivity.getDeparture()+"'";
             }
         }
-        else{ //uses both type of search method
-            query = "SELECT * FROM "+table+"\n"+
-                    "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture()+"\n"+
-                    "AND salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
+        catch(Exception e){
+            System.out.print("wrong date format");
         }
+        query = "SELECT * FROM chambre"+"\n"+
+                inJoin + " ON chambre.numero_chambre = location.numero_nchambre\n" +
+                "WHERE " + price + " AND " + date;
 
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                int age = resultSet.getInt("age");
-                int salary = resultSet.getInt("salary");
-                dataList.add(new Test(id, name, age, salary));
-            }
+                double prix = resultSet.getDouble("prix");
+                int cap = resultSet.getInt("capacite");
+                double superficie = resultSet.getDouble("superficie");
+                String cat = resultSet.getString("category");
+                String ch = resultSet.getString("chaine");
+                String nChambre = resultSet.getString("nombreDeChambres");
+
+                dataList.add(new Test(prix, cap, superficie));}
         } catch (SQLException e) {
             e.printStackTrace();
         }
