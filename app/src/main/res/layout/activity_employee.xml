@@ -4,21 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".EmployeeActivity">
 
     <LinearLayout
+        android:id="@+id/upperlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:navigationIcon="?attr/actionModeCloseDrawable" />
 
         <LinearLayout
             android:id="@+id/filters"
@@ -34,7 +26,7 @@
 
                 <SearchView
                     android:id="@+id/searchBar"
-                    android:layout_width="217dp"
+                    android:layout_width="276dp"
                     android:layout_height="match_parent">
 
                 </SearchView>
@@ -46,14 +38,6 @@
                     android:layout_weight="1"
                     android:onClick="test"
                     android:text="Search" />
-
-                <Button
-                    android:id="@+id/userBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="empView"
-                    android:text="emp view" />
             </LinearLayout>
 
             <LinearLayout
@@ -128,7 +112,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="470dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,6 +134,24 @@
             </LinearLayout>
         </ScrollView>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lowerlayout"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upperlayout">
+
+        <Button
+            android:id="@+id/addHotelBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onClickAddHotel"
+            android:text="ADD HOTEL" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

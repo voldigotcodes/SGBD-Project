@@ -3,40 +3,30 @@ package com.example.sgbd;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.Layout;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class EmployeeActivity extends AppCompatActivity {
 
-    public static List<Test> mDataList;
+    private static List<Test> mDataList;
     public static TestAdapter mAdapter;
     public static EditText min, max, arriv, dep;
 
@@ -45,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_employee);
         min = (EditText) findViewById(R.id.editMinPrice);
         max = (EditText) findViewById(R.id.editMaxPrice);
         arriv = (EditText)findViewById(R.id.editTextArrival);
@@ -102,14 +92,14 @@ public class MainActivity extends AppCompatActivity {
     public static String getArrival(){
         String arrival = arriv.getText().toString(); // get the text entered by the user as a String
         if (arrival.isEmpty()) {
-            arrival = "0000-00-00"; // set a default value if the EditText is empty
+            arrival = "0"; // set a default value if the EditText is empty
         }
         return arrival;
     }
     public static String getDeparture(){
         String depart = dep.getText().toString(); // get the text entered by the user as a String
         if (depart.isEmpty()) {
-            depart = "0000-00-00"; // set a default value if the EditText is empty
+            depart = "0"; // set a default value if the EditText is empty
         }
         return depart;
     }
@@ -118,23 +108,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void test(View view){
 
-        new DatabaseTask(mDataList).execute();
+        new EmployeeDatabaseTask(mDataList).execute();
         Toast toast = Toast.makeText(getApplicationContext(),"MIN: "+getMin()+ " MAX: "+getMax(), Toast.LENGTH_SHORT);
         toast.show();
 
     }
 
-    public void back(View view){
-        Intent i = new Intent(getApplicationContext(), LauncherActivity.class);
+    public void onClickAddHotel(View view){
+        Intent i = new Intent(getApplicationContext(), AddHotelActivity.class);
         startActivity(i);
     }
 }
 
-class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
+class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
     private List<Test> mDataList;
+    private String table = "test";
 
-    public DatabaseTask(List<Test> dataList) {
+    public EmployeeDatabaseTask(List<Test> dataList) {
         mDataList = dataList;
     }
 
@@ -146,41 +137,27 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
-        String price = null;
-        String date = null;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query;
-        String table = "test";
 
         //the search query for arrival and departure have to be changed
-        if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){
-            price = " salary >="+MainActivity.getMin() + "AND salary <=" + MainActivity.getMax();
-        }
-        try {
-            if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){
-                date = " id BETWEEN "+MainActivity.getArrival() +" AND "+ MainActivity.getDeparture();
-            }
-        }
-        catch(Exception e){
-            System.out.print("wrong date format");
-        }
-        query = "SELECT * FROM "+table+"\n"+
-                "WHERE " + price + " AND " + date;
-
-
-       /* if(MainActivity.getMin().equals("0")&&MainActivity.getMax().equals("0")){ //when there is no min and max entered
-            query = "SELECT * FROM testtable1\n"+
+        if(MainActivity.getMin().equals("0")&&MainActivity.getMax().equals("0")){ //when there is no min and max entered
+            query = "SELECT * FROM "+table+"\n"+
                     "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture();
         }
         else if(MainActivity.getArrival().equals("0")&&MainActivity.getDeparture().equals("0")){ //when there is no arrival and departure entered
-            query = "SELECT * FROM testtable1\n"+
-                    "WHERE salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
+            if(Integer.parseInt(MainActivity.getMax())>=Integer.parseInt(MainActivity.getMin())){
+                query = "SELECT * FROM "+table+"\n"+
+                        "WHERE salary > "+MainActivity.getMin() + "AND salary < " + MainActivity.getMax();
+            }else{
+                query = "SELECT * FROM "+table+"\n"+
+                        "WHERE salary > "+MainActivity.getMin();
+            }
         }
         else{ //uses both type of search method
-            query = "SELECT * FROM testtable1\n"+
+            query = "SELECT * FROM "+table+"\n"+
                     "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture()+"\n"+
                     "AND salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
-        }*/
+        }
 
 
         try {
