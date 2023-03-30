@@ -23,10 +23,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -99,14 +102,14 @@ public class MainActivity extends AppCompatActivity {
     public static String getArrival(){
         String arrival = arriv.getText().toString(); // get the text entered by the user as a String
         if (arrival.isEmpty()) {
-            arrival = "0"; // set a default value if the EditText is empty
+            arrival = "0000-00-00"; // set a default value if the EditText is empty
         }
         return arrival;
     }
     public static String getDeparture(){
         String depart = dep.getText().toString(); // get the text entered by the user as a String
         if (depart.isEmpty()) {
-            depart = "0"; // set a default value if the EditText is empty
+            depart = "0000-00-00"; // set a default value if the EditText is empty
         }
         return depart;
     }
@@ -125,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
 class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
     private List<Test> mDataList;
-    private String table = "test";
 
     public DatabaseTask(List<Test> dataList) {
         mDataList = dataList;
@@ -139,27 +141,40 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
+        String price = null;
+        String date = null;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query;
 
         //the search query for arrival and departure have to be changed
-        if(MainActivity.getMin().equals("0")&&MainActivity.getMax().equals("0")){ //when there is no min and max entered
-            query = "SELECT * FROM "+table+"\n"+
+        if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){
+            price = " salary >="+MainActivity.getMin() + "AND salary <=" + MainActivity.getMax();
+        }
+        try {
+            if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){
+                date = " id BETWEEN "+MainActivity.getArrival() +" AND "+ MainActivity.getDeparture();
+            }
+        }
+        catch(Exception e){
+            System.out.print("wrong date format");
+        }
+        query = "SELECT * FROM testtable1\n"+
+                "WHERE " + price + " AND " + date;
+
+
+       /* if(MainActivity.getMin().equals("0")&&MainActivity.getMax().equals("0")){ //when there is no min and max entered
+            query = "SELECT * FROM testtable1\n"+
                     "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture();
         }
         else if(MainActivity.getArrival().equals("0")&&MainActivity.getDeparture().equals("0")){ //when there is no arrival and departure entered
-            if(Integer.parseInt(MainActivity.getMax())>=Integer.parseInt(MainActivity.getMin())){
-                query = "SELECT * FROM "+table+"\n"+
-                        "WHERE salary > "+MainActivity.getMin() + "AND salary < " + MainActivity.getMax();
-            }else{
-                query = "SELECT * FROM "+table+"\n"+
-                        "WHERE salary > "+MainActivity.getMin();
-            }
+            query = "SELECT * FROM testtable1\n"+
+                    "WHERE salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
         }
         else{ //uses both type of search method
-            query = "SELECT * FROM "+table+"\n"+
+            query = "SELECT * FROM testtable1\n"+
                     "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture()+"\n"+
                     "AND salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
-        }
+        }*/
 
 
         try {

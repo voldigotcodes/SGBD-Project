@@ -25,7 +25,7 @@
 
                 <SearchView
                     android:id="@+id/searchBar"
-                    android:layout_width="276dp"
+                    android:layout_width="217dp"
                     android:layout_height="match_parent">
 
                 </SearchView>
@@ -37,6 +37,14 @@
                     android:layout_weight="1"
                     android:onClick="test"
                     android:text="Search" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="empView"
+                    android:text="emp view" />
             </LinearLayout>
 
             <LinearLayout
