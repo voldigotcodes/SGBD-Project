@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         max = (EditText) findViewById(R.id.editMaxPrice);
         arriv = (EditText)findViewById(R.id.editTextArrival);
         dep = (EditText) findViewById(R.id.editTextDep);
+        Button hideShow = findViewById(R.id.revealBtn);
+
+        hideShow.setText("SHOW FILTERS");
 
 
         mDataList = new ArrayList<>();
@@ -121,8 +124,7 @@ public class MainActivity extends AppCompatActivity {
         new DatabaseTask(mDataList).execute();
         Toast toast = Toast.makeText(getApplicationContext(),"MIN: "+getMin()+ " MAX: "+getMax(), Toast.LENGTH_SHORT);
         toast.show();
-        Toast toast2 = Toast.makeText(getApplicationContext(),"A: "+getArrival()+ " D: "+getDeparture(), Toast.LENGTH_SHORT);
-        toast2.show();
+
     }
 
     public void back(View view){
@@ -159,8 +161,8 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         String inJoin = "INNER JOIN";
 
         //the search query for arrival and departure have to be changed
-        if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){// checks if the min is less than the max
-            price = " prix >= "+MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
+        if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
+            price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
         }
         try {
             if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure

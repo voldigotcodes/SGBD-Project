@@ -191,6 +191,6 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         super.onPostExecute(dataList);
         mDataList.clear();
         mDataList.addAll(dataList);
-        MainActivity.mAdapter.notifyDataSetChanged();
+        EmployeeActivity.mAdapter.notifyDataSetChanged();
     }
 }

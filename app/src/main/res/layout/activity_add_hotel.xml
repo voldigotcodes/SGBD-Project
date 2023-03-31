@@ -36,14 +36,6 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/etoiles"
-            android:layout_width="match_parent"
-            android:layout_height="71dp"
-            android:ems="10"
-            android:hint="etoiles"
-            android:inputType="textPersonName" />
-
-        <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="71dp"
@@ -75,10 +67,17 @@
             android:hint="Chaine"
             android:inputType="textPersonName" />
 
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numStars="5" />
+
         <Button
             android:id="@+id/addH"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="addHotel"
             android:text="add" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
