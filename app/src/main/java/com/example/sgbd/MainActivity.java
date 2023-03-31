@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         max = (EditText) findViewById(R.id.editMaxPrice);
         arriv = (EditText)findViewById(R.id.editTextArrival);
         dep = (EditText) findViewById(R.id.editTextDep);
-
+//have to set up the rest of the editText variables
         Button hideShow = findViewById(R.id.revealBtn);
 
         hideShow.setText("SHOW FILTERS");
