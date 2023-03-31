@@ -138,21 +138,19 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Database db = new Database();
         Connection connection = db.getConnection();
         Statement statement = null;
+        Statement statement2 =null;
         ResultSet resultSet = null;
+        ResultSet resultSet2 = null;
         String price = null;
         String date = null;
-        String capacity = null;
-        String sup = null;
-        String chaine = null;
-        String category = null;
-        String nombreChambre = null;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String query;
+        String query1;
+        String query2;
         String inJoin = "INNER JOIN";
 
         //the search query for arrival and departure have to be changed
         if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){// checks if the min is less than the max
-            price = " prix >="+MainActivity.getMin() + "AND prix <=" + MainActivity.getMax();
+            price = " prix >= "+MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
         }
         try {
             if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
@@ -162,23 +160,36 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         catch(Exception e){
             System.out.print("wrong date format");
         }
-        query = "SELECT * FROM chambre"+"\n"+
-                inJoin + " ON chambre.numero_chambre = location.numero_nchambre\n" +
+        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
+                "SELECT * FROM chambre"+"\n"+
+                inJoin +" location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
+                "AND chambre.hadresse = location.hadresse\n"+
                 "WHERE " + price + " AND " + date;
+        System.out.println("query: "+query1);
+
+        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
+                "    FROM hotel\n" +
+                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse";
+
 
 
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                double prix = resultSet.getDouble("prix");
-                int cap = resultSet.getInt("capacite");
-                double superficie = resultSet.getDouble("superficie");
-                String cat = resultSet.getString("category");
-                String ch = resultSet.getString("chaine");
-                String nChambre = resultSet.getString("nombreDeChambres");
+            statement2 = connection.createStatement();
+            resultSet = statement.executeQuery(query1);
+            resultSet2 = statement2.executeQuery(query2);
+            while (resultSet2.next()) {
+                double prix = resultSet2.getDouble("prix");
+                int cap = resultSet2.getInt("capacite");
+                double superficie = resultSet2.getDouble("superficie");
+                int cat = resultSet2.getInt("category");
+                String ch = resultSet2.getString("chaine");
+                String hnom = resultSet2.getString("hotel");
+                int nChambre = resultSet2.getInt("nombreDeChambres");
+                //System.out.println("Prix:"+ prix +" cap: "+ cap + "sup"+ sup);
 
-                dataList.add(new Test(prix, cap, superficie));}
+                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superficie));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -6,20 +6,24 @@ import android.os.Bundle;
 
 public class Test {
 
+    String cNom;
+    String hNom;
+    int cat;
+    int cap;
+    int numCh;
     double prix;
     double sup;
-    int cap;
-    String cat;
-    String chaine;
-    String numCh;
 
     public Test(){}
 
-    public Test(double prix, int cap, double sup) {
+    public Test(String cNom, String hNom, int cat, int cap, int numch, double prix, double sup) {
+        this.cNom = cNom;
+        this.hNom = hNom;
+        this.cat = cat;
+        this.cap = cap;
+        this.numCh = numch;
         this.prix = prix;
         this.sup = sup;
-        this.cap = cap;
-
 
     }
 
@@ -31,6 +35,7 @@ public class Test {
         this.prix = prix;
     }
 
+
     public int getCap() {
         return cap;
     }
@@ -38,6 +43,7 @@ public class Test {
     public void setCap(int cap) {
         this.cap = cap;
     }
+
 
     public double getSup() {
         return sup;
@@ -47,27 +53,30 @@ public class Test {
         this.sup = sup;
     }
 
-    public String getCat() {
+
+    public int getCat() {
         return cat;
     }
 
-    public void setCat(String cat) {
+    public void setCat(int cat) {
         this.cat = cat;
     }
 
+
     public String getChaine() {
-        return chaine;
+        return cNom;
     }
 
     public void setChaine(String chaine) {
-        this.chaine = chaine;
+        this.cNom = chaine;
     }
 
-    public String getNumCh() {
+
+    public int getNumCh() {
         return numCh;
     }
 
-    public void setNumCh(String numCh) {
+    public void setNumCh(int numCh) {
         this.numCh = numCh;
     }
 

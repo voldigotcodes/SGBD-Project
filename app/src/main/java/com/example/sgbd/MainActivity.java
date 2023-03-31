@@ -151,16 +151,12 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         ResultSet resultSet = null;
         String price = null;
         String date = null;
-        String capacity = null;
-        String sup = null;
-        String chaine = null;
-        String category = null;
-        String nombreChambre = null;
+        String capacite="0";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String query;
-        String inJoin = "INNER JOIN";
+        String query1;
+        String query2;
 
-        //the search query for arrival and departure have to be changed
+
         if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
             price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
         }
@@ -172,45 +168,40 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         catch(Exception e){
             System.out.print("wrong date format");
         }
-        query = "SELECT * FROM chambre"+"\n"+
-                inJoin +" location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "AND chambre.hadresse = location.hadresse\n"+
+
+
+        //create temporary table later to be used by the hotel table
+        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
+                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
+                "FROM chambre\n"+
+                "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
                 "WHERE " + price + " AND " + date;
-        System.out.println("query: "+query);
+        System.out.println("query1: "+query1);
 
-        /*SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, location.arrive, location.depart, sin_c, sin_e
-    FROM chambre
-	INNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre
-	WHERE prix >=500 AND prix <= 1200 AND arrive >='2022-01-31' AND depart <= '2022-12-31'*/
+        //query returning the end result of the search
+        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
+                "    FROM hotel\n" +
+                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse";
+        System.out.println("query2: "+query2);
 
-       /* if(MainActivity.getMin().equals("0")&&MainActivity.getMax().equals("0")){ //when there is no min and max entered
-            query = "SELECT * FROM testtable1\n"+
-                    "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture();
-        }
-        else if(MainActivity.getArrival().equals("0")&&MainActivity.getDeparture().equals("0")){ //when there is no arrival and departure entered
-            query = "SELECT * FROM testtable1\n"+
-                    "WHERE salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
-        }
-        else{ //uses both type of search method
-            query = "SELECT * FROM testtable1\n"+
-                    "WHERE id BETWEEN "+MainActivity.getArrival() + "AND "+MainActivity.getDeparture()+"\n"+
-                    "AND salary BETWEEN "+MainActivity.getMin() + "AND "+MainActivity.getMax();
-        }*/
 
 
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
+
+            boolean done = statement.execute(query1);
+            resultSet = statement.executeQuery(query2);
             while (resultSet.next()) {
                 double prix = resultSet.getDouble("prix");
                 int cap = resultSet.getInt("capacite");
                 double superficie = resultSet.getDouble("superficie");
-                //String cat = resultSet.getString("category");
-                //String ch = resultSet.getString("chaine");
-                //String nChambre = resultSet.getString("nombreDeChambres");
-                //System.out.println("Prix:"+ prix +" cap: "+ cap + "sup"+ sup);
+                int cat = resultSet.getInt("etoile");
+                String ch = resultSet.getString("chaine_nom");
+                String hnom = resultSet.getString("hnom");
+                int nChambre = resultSet.getInt("nombre_chambre");
+                System.out.println("executed:"+ done);
 
-                dataList.add(new Test(prix, cap, superficie));
+                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superficie));
             }
         } catch (SQLException e) {
             e.printStackTrace();
