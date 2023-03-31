@@ -138,20 +138,38 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Database db = new Database();
         Connection connection = db.getConnection();
         Statement statement = null;
-        Statement statement2 =null;
         ResultSet resultSet = null;
-        ResultSet resultSet2 = null;
         String price = null;
         String date = null;
+        String capacite=null;
+        String superficie =null;
+        String chaine = "";
+        String numChambre = null;
+        String categorie = null;
+        String where ="";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query1;
         String query2;
-        String inJoin = "INNER JOIN";
 
-        //the search query for arrival and departure have to be changed
-        if(Integer.parseInt(MainActivity.getMin())<Integer.parseInt(MainActivity.getMax())){// checks if the min is less than the max
-            price = " prix >= "+MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
+
+        if(Integer.parseInt(MainActivity.getCap())<=0){
+            capacite = " AND chambre.capacite >= "+ MainActivity.getCap();
         }
+        if(Double.parseDouble(MainActivity.getArea())<=0){
+            superficie = " AND chambre.superficie >= "+ MainActivity.getArea();
+        }
+        if(!MainActivity.getChot().equals("")){//in query2
+            chaine = " AND temp.chaine_nom = "+MainActivity.getChot();
+        }
+        if(Integer.parseInt(MainActivity.getnCh())<=0){//in query2
+            numChambre = " temp.nombre_chambre >= "+ MainActivity.getnCh();
+        }
+        if(Integer.parseInt(MainActivity.getCat())<=0){//in query 2
+            categorie = " AND temp.etoile >= "+ MainActivity.getCat();
+        }
+        if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
+            price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
+        }//maybe an esle statement for an invalid entry
         try {
             if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
                 date = " arrive >= '"+MainActivity.getArrival() +"' AND depart <= '"+ MainActivity.getDeparture()+"'";
@@ -160,36 +178,45 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         catch(Exception e){
             System.out.print("wrong date format");
         }
-        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
-                "SELECT * FROM chambre"+"\n"+
-                inJoin +" location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "AND chambre.hadresse = location.hadresse\n"+
-                "WHERE " + price + " AND " + date;
-        System.out.println("query: "+query1);
 
+        if(!(chaine.equals("")&&numChambre.equals(null)&&categorie.equals(null))){
+            where = " WHERE "+ numChambre + categorie +chaine ;
+        }
+
+        //create temporary table later to be used by the hotel table
+        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
+                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
+                "FROM chambre\n"+
+                "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
+                "WHERE " + price + " AND " + date + " AND chambre.capacite >"+ capacite;
+        System.out.println("query1: "+query1);
+
+        //query returning the end result of the search
         query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
                 "    FROM hotel\n" +
-                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse";
+                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
+        System.out.println("query2: "+query2);
 
 
 
         try {
             statement = connection.createStatement();
-            statement2 = connection.createStatement();
-            resultSet = statement.executeQuery(query1);
-            resultSet2 = statement2.executeQuery(query2);
-            while (resultSet2.next()) {
-                double prix = resultSet2.getDouble("prix");
-                int cap = resultSet2.getInt("capacite");
-                double superficie = resultSet2.getDouble("superficie");
-                int cat = resultSet2.getInt("category");
-                String ch = resultSet2.getString("chaine");
-                String hnom = resultSet2.getString("hotel");
-                int nChambre = resultSet2.getInt("nombreDeChambres");
-                //System.out.println("Prix:"+ prix +" cap: "+ cap + "sup"+ sup);
 
-                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superficie));
+            boolean done = statement.execute(query1);
+            resultSet = statement.executeQuery(query2);
+            while (resultSet.next()) {
+                double prix = resultSet.getDouble("prix");
+                int cap = resultSet.getInt("capacite");
+                double superf = resultSet.getDouble("superficie");
+                int cat = resultSet.getInt("etoile");
+                String ch = resultSet.getString("chaine_nom");
+                String hnom = resultSet.getString("hnom");
+                int nChambre = resultSet.getInt("nombre_chambre");
+                System.out.println("executed:"+ done);
+
+                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

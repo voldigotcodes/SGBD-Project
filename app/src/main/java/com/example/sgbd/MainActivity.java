@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<Test> mDataList;
     public static TestAdapter mAdapter;
-    public static EditText min, max, arriv, dep;
+    public static EditText min, max, arriv, dep, capacity, area, cHot, cat, numCh;
 
     RecyclerView mRecyclerView;
     @SuppressLint("MissingInflatedId")
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         max = (EditText) findViewById(R.id.editMaxPrice);
         arriv = (EditText)findViewById(R.id.editTextArrival);
         dep = (EditText) findViewById(R.id.editTextDep);
+
         Button hideShow = findViewById(R.id.revealBtn);
 
         hideShow.setText("SHOW FILTERS");
@@ -116,6 +117,42 @@ public class MainActivity extends AppCompatActivity {
         }
         return depart;
     }
+    public static String getCap(){
+        String c = capacity.getText().toString(); // get the text entered by the user as a String
+        if (c.isEmpty()) {
+            c = "0"; // set a default value if the EditText is empty
+        }
+        return c;
+    }
+
+    public static String getArea(){
+        String a = area.getText().toString(); // get the text entered by the user as a String
+        if (a.isEmpty()) {
+            a = "0"; // set a default value if the EditText is empty
+        }
+        return a;
+    }
+    public static String getChot(){
+        String cH = cHot.getText().toString(); // get the text entered by the user as a String
+        if (cH.isEmpty()) {
+            cH = ""; // set a default value if the EditText is empty
+        }
+        return cH;
+    }
+    public static String getCat(){
+        String ca = cat.getText().toString(); // get the text entered by the user as a String
+        if (ca.isEmpty()) {
+            ca = "0"; // set a default value if the EditText is empty
+        }
+        return ca;
+    }
+    public static String getnCh(){
+        String nCh = numCh.getText().toString(); // get the text entered by the user as a String
+        if (nCh.isEmpty()) {
+            nCh = "0"; // set a default value if the EditText is empty
+        }
+        return nCh;
+    }
 
 
 
@@ -151,15 +188,35 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         ResultSet resultSet = null;
         String price = null;
         String date = null;
-        String capacite="0";
+        String capacite=null;
+        String superficie =null;
+        String chaine = "";
+        String numChambre = null;
+        String categorie = null;
+        String where ="";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query1;
         String query2;
 
 
+        if(Integer.parseInt(MainActivity.getCap())<=0){
+            capacite = " AND chambre.capacite >= "+ MainActivity.getCap();
+        }
+        if(Double.parseDouble(MainActivity.getArea())<=0){
+            superficie = " AND chambre.superficie >= "+ MainActivity.getArea();
+        }
+        if(!MainActivity.getChot().equals("")){//in query2
+            chaine = " AND temp.chaine_nom = "+MainActivity.getChot();
+        }
+        if(Integer.parseInt(MainActivity.getnCh())<=0){//in query2
+            numChambre = " temp.nombre_chambre >= "+ MainActivity.getnCh();
+        }
+        if(Integer.parseInt(MainActivity.getCat())<=0){//in query 2
+            categorie = " AND temp.etoile >= "+ MainActivity.getCat();
+        }
         if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
             price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
-        }
+        }//maybe an esle statement for an invalid entry
         try {
             if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
                 date = " arrive >= '"+MainActivity.getArrival() +"' AND depart <= '"+ MainActivity.getDeparture()+"'";
@@ -169,19 +226,22 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
             System.out.print("wrong date format");
         }
 
+        if(!(chaine.equals("")&&numChambre.equals(null)&&categorie.equals(null))){
+            where = " WHERE "+ numChambre + categorie +chaine ;
+        }
 
         //create temporary table later to be used by the hotel table
         query1 = "CREATE TEMPORARY TABLE temp AS\n"+
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
                 "FROM chambre\n"+
                 "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "WHERE " + price + " AND " + date;
+                "WHERE " + price + " AND " + date + " AND chambre.capacite >"+ capacite;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
         query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
                 "    FROM hotel\n" +
-                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse";
+                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
         System.out.println("query2: "+query2);
 
 
@@ -194,14 +254,14 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
             while (resultSet.next()) {
                 double prix = resultSet.getDouble("prix");
                 int cap = resultSet.getInt("capacite");
-                double superficie = resultSet.getDouble("superficie");
+                double superf = resultSet.getDouble("superficie");
                 int cat = resultSet.getInt("etoile");
                 String ch = resultSet.getString("chaine_nom");
                 String hnom = resultSet.getString("hnom");
                 int nChambre = resultSet.getInt("nombre_chambre");
                 System.out.println("executed:"+ done);
 
-                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superficie));
+                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf));
             }
         } catch (SQLException e) {
             e.printStackTrace();
