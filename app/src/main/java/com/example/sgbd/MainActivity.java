@@ -214,10 +214,10 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
             chaine = " AND temp.chaine_nom = "+MainActivity.getChot();
         }
         if(Integer.parseInt(MainActivity.getnCh())<=0){//in query2
-            numChambre = " temp.nombre_chambre >= "+ MainActivity.getnCh();
+            numChambre = " nombre_chambre >= "+ MainActivity.getnCh();
         }
         if(Integer.parseInt(MainActivity.getCat())<=0){//in query 2
-            categorie = " AND temp.etoile >= "+ MainActivity.getCat();
+            categorie = " AND etoile >= "+ MainActivity.getCat();
         }
         if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
             price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
@@ -240,7 +240,7 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
                 "FROM chambre\n"+
                 "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "WHERE " + price + " AND " + date + " AND chambre.capacite >"+ capacite;
+                "WHERE " + price + " AND " + date + capacite;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
