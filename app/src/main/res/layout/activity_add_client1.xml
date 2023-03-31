@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddEmployee">
+    tools:context=".AddClient1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:text="ADD EMPLOYEE"
+            android:text="ADD CLIENT"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="71dp"
             android:ems="10"
-            android:hint="role"
+            android:hint="adresse"
             android:inputType="textPersonName" />
 
         <EditText
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="71dp"
             android:ems="10"
-            android:hint="address employee"
+            android:hint="date"
             android:inputType="textPersonName" />
 
         <EditText
@@ -56,15 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="71dp"
             android:ems="10"
-            android:hint="address hotel"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:id="@+id/Epass"
-            android:layout_width="match_parent"
-            android:layout_height="71dp"
-            android:ems="10"
-            android:hint="passowrd"
+            android:hint="password"
             android:inputType="textPersonName" />
 
         <EditText
@@ -79,8 +71,9 @@
             android:id="@+id/addC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="addEmp"
+            android:onClick="addClient"
             android:text="add" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
