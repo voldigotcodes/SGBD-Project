@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
         max = (EditText) findViewById(R.id.editMaxPrice);
         arriv = (EditText)findViewById(R.id.editTextArrival);
         dep = (EditText) findViewById(R.id.editTextDep);
+        capacity = (EditText) findViewById(R.id.capacityEditText);
+        area = (EditText) findViewById(R.id.sizeEditText);
+        cHot = (EditText) findViewById(R.id.chaineEditText);
+        cat = (EditText) findViewById(R.id.categoryEditText);
+        numCh = (EditText) findViewById(R.id.capacityEditText);
 //have to set up the rest of the editText variables
         Button hideShow = findViewById(R.id.revealBtn);
 

@@ -31,7 +31,14 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
         holder.price.setText(String.valueOf(test.getPrix()));
         holder.capacity.setText(String.valueOf(test.getCap()));
-        holder.area.setText(String.valueOf(String.valueOf(test.getSup())));
+        holder.area.setText(String.valueOf(test.getSup()));
+
+        holder.cNom.setText(String.valueOf(test.getcNom()));
+        holder.hNom.setText(String.valueOf(test.gethNom()));
+        holder.cat.setText(String.valueOf(test.getCat()));
+
+        holder.cap.setText(String.valueOf(test.getCap()));
+        holder.numCh.setText(String.valueOf(test.getNumCh()));
 
     }
 
@@ -49,11 +56,24 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         public TextView capacity;
         public TextView area;
 
+        public TextView cNom;
+        public TextView hNom;
+        public TextView cat;
+
+        public TextView cap;
+        public TextView numCh;
+
         public TestViewHolder(@NonNull View itemView) {
             super(itemView);
-            price = itemView.findViewById(R.id.price);
-            capacity = itemView.findViewById(R.id.capacity);
-            area = itemView.findViewById(R.id.area);
+            price = itemView.findViewById(R.id.viewPrice);
+            capacity = itemView.findViewById(R.id.viewCapacity);
+            area = itemView.findViewById(R.id.viewSize);
+            cNom = itemView.findViewById(R.id.viewChain);
+            hNom = itemView.findViewById(R.id.hotelNameView);
+            cap = itemView.findViewById(R.id.viewSize);
+            cat = itemView.findViewById(R.id.viewCategory);
+            numCh = itemView.findViewById(R.id.viewRoomsNum);
+
         }
     }
 

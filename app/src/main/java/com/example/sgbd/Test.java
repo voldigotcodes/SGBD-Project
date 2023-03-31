@@ -27,57 +27,31 @@ public class Test {
 
     }
 
-    public double getPrix() {
-        return prix;
+    public String getcNom() {
+        return cNom;
     }
 
-    public void setPrix(double prix) {
-        this.prix = prix;
+    public String gethNom() {
+        return hNom;
     }
-
-
-    public int getCap() {
-        return cap;
-    }
-
-    public void setCap(int cap) {
-        this.cap = cap;
-    }
-
-
-    public double getSup() {
-        return sup;
-    }
-
-    public void setSup(double sup) {
-        this.sup = sup;
-    }
-
 
     public int getCat() {
         return cat;
     }
 
-    public void setCat(int cat) {
-        this.cat = cat;
+    public int getCap() {
+        return cap;
     }
-
-
-    public String getChaine() {
-        return cNom;
-    }
-
-    public void setChaine(String chaine) {
-        this.cNom = chaine;
-    }
-
 
     public int getNumCh() {
         return numCh;
     }
 
-    public void setNumCh(int numCh) {
-        this.numCh = numCh;
+    public double getPrix() {
+        return prix;
     }
 
+    public double getSup() {
+        return sup;
+    }
 }
