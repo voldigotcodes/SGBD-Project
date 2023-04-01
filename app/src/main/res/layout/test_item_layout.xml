@@ -2,121 +2,173 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="260dp"
     android:outlineAmbientShadowColor="#000000">
 
     <ImageView
         android:id="@+id/btnHotel"
         android:layout_width="271dp"
         android:layout_height="259dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="1dp"
         android:outlineAmbientShadowColor="#000000"
         android:outlineSpotShadowColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/output_onlinepngtools"
-        tools:layout_editor_absoluteX="-4dp"
-        tools:layout_editor_absoluteY="0dp"
         tools:srcCompat="@drawable/output_onlinepngtools" />
-
-    <TextView
-        android:id="@+id/viewRoomsNum"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        tools:layout_editor_absoluteX="90dp"
-        tools:layout_editor_absoluteY="204dp" />
-
-    <TextView
-        android:id="@+id/hotelchain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hotel chain : "
-        tools:layout_editor_absoluteX="123dp"
-        tools:layout_editor_absoluteY="176dp" />
 
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="68dp"
         android:text="Price :"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="176dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/hotelNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="240dp"
         android:text="Hotel"
-        tools:layout_editor_absoluteX="102dp"
-        tools:layout_editor_absoluteY="10dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/btnHotel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnHotel"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/viewCategory"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="77dp"
-        tools:layout_editor_absoluteY="233dp" />
+        android:layout_marginStart="148dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/viewSize"
+        android:layout_width="94dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="232dp"
+        android:layout_marginBottom="12dp"
+        android:inputType="number|numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/viewPrice"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="68dp"
         android:inputType="number|numberDecimal"
-        tools:layout_editor_absoluteX="50dp"
-        tools:layout_editor_absoluteY="176dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/viewCapacity"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="256dp"
+        android:layout_marginBottom="40dp"
         android:inputType="number|numberDecimal"
-        tools:layout_editor_absoluteX="184dp"
-        tools:layout_editor_absoluteY="204dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/capacity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="192dp"
+        android:layout_marginBottom="40dp"
         android:text="Capacity :"
-        tools:layout_editor_absoluteX="123dp"
-        tools:layout_editor_absoluteY="204dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="8dp"
         android:text="Category : "
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="233dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/viewChain"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="204dp"
-        tools:layout_editor_absoluteY="176dp" />
+        android:layout_width="41dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="284dp"
+        android:layout_marginBottom="68dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/numRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="40dp"
         android:text="No. Rooms : "
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="204dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="192dp"
+        android:layout_marginBottom="12dp"
         android:text="Size : "
-        tools:layout_editor_absoluteX="123dp"
-        tools:layout_editor_absoluteY="230dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/viewSize"
-        android:layout_width="90dp"
+        android:id="@+id/viewRoomsNum"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:inputType="number|numberDecimal"
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="230dp" />
+        android:layout_marginStart="160dp"
+        android:layout_marginBottom="40dp"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/hotelchain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="204dp"
+        android:layout_marginBottom="68dp"
+        android:text="Hotel chain : "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RatingBar
+        android:id="@+id/ratingBar3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="192dp"
+        android:max="5"
+        android:numStars="5"
+        android:progressTint="#FFEB3B"
+        android:rating="5"
+        android:rotation="-90"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/viewChain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hotelNameView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

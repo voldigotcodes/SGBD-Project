@@ -8,7 +8,7 @@ public class Test {
 
     String cNom;
     String hNom;
-    int cat;
+    double cat;
     int cap;
     int numCh;
     double prix;
@@ -16,7 +16,7 @@ public class Test {
 
     public Test(){}
 
-    public Test(String cNom, String hNom, int cat, int cap, int numch, double prix, double sup) {
+    public Test(String cNom, String hNom, double cat, int cap, int numch, double prix, double sup) {
         this.cNom = cNom;
         this.hNom = hNom;
         this.cat = cat;
@@ -35,7 +35,7 @@ public class Test {
         return hNom;
     }
 
-    public int getCat() {
+    public double getCat() {
         return cat;
     }
 

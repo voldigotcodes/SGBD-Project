@@ -2,7 +2,12 @@ package com.example.sgbd;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
+import androidx.core.util.Pair;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,11 +15,15 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,6 +32,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +77,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
         // set adapter
         mRecyclerView.setAdapter(mAdapter);
+
     }
 
     public void filterReveal(View view){
@@ -152,12 +163,49 @@ public class EmployeeActivity extends AppCompatActivity {
     }
 
 
-
     public void test(View view){
 
-        new EmployeeDatabaseTask(mDataList).execute();
+        new DatabaseTask(mDataList).execute();
         Toast toast = Toast.makeText(getApplicationContext(),"MIN: "+getMin()+ " MAX: "+getMax(), Toast.LENGTH_SHORT);
         toast.show();
+
+    }
+
+    public static void showUpdateHotelPopup(View view) {
+        // Create a MaterialDatePicker object for the date range picker\
+        FragmentManager fragmentManager = ((FragmentActivity) view.getContext()).getSupportFragmentManager();
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        MaterialDatePicker<Pair<Long, Long>> materialDatePicker = builder.build();
+
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        View dialogView = inflater.inflate(R.layout.popup_update_hotel, null);
+
+        // Set the date selection listener to update the UI when the user selects a date range
+        materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+            // Convert the selected dates to a formatted string for display in the UI
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            String dateRangeString = dateFormat.format(new Date(selection.first)) + " - " + dateFormat.format(new Date(selection.second));
+            // Update the UI with the selected date range
+        });
+
+
+        // Show the date range picker in a popup dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(dialogView);
+        alertDialogBuilder.setTitle("Update Hotel Information");
+
+
+        alertDialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+            // if the info has been filled out correctly then send it else return a toast
+
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            // Do something when the "Cancel" button is clicked
+        });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
     }
 
@@ -170,7 +218,6 @@ public class EmployeeActivity extends AppCompatActivity {
 class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
     private List<Test> mDataList;
-    private String table = "test";
 
     public EmployeeDatabaseTask(List<Test> dataList) {
         mDataList = dataList;
@@ -258,7 +305,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 double prix = resultSet.getDouble("prix");
                 int cap = resultSet.getInt("capacite");
                 double superf = resultSet.getDouble("superficie");
-                int cat = resultSet.getInt("etoile");
+                double cat = resultSet.getDouble("etoile");
                 String ch = resultSet.getString("chaine_nom");
                 String hnom = resultSet.getString("hnom");
                 int nChambre = resultSet.getInt("nombre_chambre");

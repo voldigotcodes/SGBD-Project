@@ -2,14 +2,20 @@ package com.example.sgbd;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.util.Pair;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,20 +23,29 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.BreakIterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -75,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set adapter
         mRecyclerView.setAdapter(mAdapter);
+        new DatabaseTask(mDataList).execute();
     }
 
     public void filterReveal(View view){
@@ -169,10 +185,73 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void back(View view){
-        Intent i = new Intent(getApplicationContext(), LauncherActivity.class);
-        startActivity(i);
+    public static void senReservationInfo(String date, String sin, String num){
+
     }
+
+    public static void showDatePickerPopup(View view) {
+        // Create a MaterialDatePicker object for the date range picker\
+        FragmentManager fragmentManager = ((FragmentActivity) view.getContext()).getSupportFragmentManager();
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        MaterialDatePicker<Pair<Long, Long>> materialDatePicker = builder.build();
+
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        View dialogView = inflater.inflate(R.layout.popup_rent_hotel, null);
+
+        TextView dateRangeTextView = (TextView) dialogView.findViewById(R.id.date_picker_textview);
+
+
+        // Set the date selection listener to update the UI when the user selects a date range
+        materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+            // Convert the selected dates to a formatted string for display in the UI
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            String dateRangeString = dateFormat.format(new Date(selection.first)) + " - " + dateFormat.format(new Date(selection.second));
+            // Update the UI with the selected date range
+            dateRangeTextView.setText(dateRangeString);
+        });
+
+
+        // Show the date range picker in a popup dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(dialogView);
+        alertDialogBuilder.setTitle("Select dates");
+
+
+        EditText sinEdit = dialogView.findViewById(R.id.sinEdit);
+        EditText roomNumberEdit = dialogView.findViewById(R.id.roomNumberEdit);
+
+
+        dialogView.findViewById(R.id.date_picker_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                materialDatePicker.show(fragmentManager, "DATE_PICKER");
+            }
+        });
+
+        alertDialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+            // Do something when the "Confirm" button is clicked
+
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            // Do something when the "Cancel" button is clicked
+        });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+        dialogView.findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!sinEdit.getText().toString().isEmpty() && !roomNumberEdit.getText().toString().isEmpty() && !dateRangeTextView.getText().toString().isEmpty()) {
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    dialogView.findViewById(R.id.confirm_button).setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+
 }
 
 class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
@@ -242,15 +321,25 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
 
         //create temporary table later to be used by the hotel table
+//        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
+//                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
+//                "FROM chambre\n"+
+//                "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
+//                "WHERE " + price + " AND " + date + capacite + superficie;
+//        System.out.println("query1: "+query1);
+//
+//        //query returning the end result of the search
+//        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
+//                "    FROM hotel\n" +
+//                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
         query1 = "CREATE TEMPORARY TABLE temp AS\n"+
-                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
+                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite\n " +
                 "FROM chambre\n"+
-                "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "WHERE " + price + " AND " + date + capacite + superficie;
+                "WHERE " + price + capacite + superficie;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
-        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
+        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie\n" +
                 "    FROM hotel\n" +
                 "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
         System.out.println("query2: "+query2);
@@ -267,7 +356,7 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 double prix = resultSet.getDouble("prix");
                 int cap = resultSet.getInt("capacite");
                 double superf = resultSet.getDouble("superficie");
-                int cat = resultSet.getInt("etoile");
+                double cat = resultSet.getDouble("etoile");
                 String ch = resultSet.getString("chaine_nom");
                 String hnom = resultSet.getString("hnom");
                 int nChambre = resultSet.getInt("nombre_chambre");

@@ -1,173 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    tools:context=".EmployeeActivity">
 
-
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:navigationIcon="?attr/actionModeCloseDrawable" />
 
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:context=".EmployeeActivity">
+        <LinearLayout
+            android:id="@+id/filters"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/upperlayout"
+                android:id="@+id/searchLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar2"
-                    android:layout_width="match_parent"
+                <SearchView
+                    android:id="@+id/searchBar"
+                    android:layout_width="217dp"
+                    android:layout_height="match_parent">
+
+                </SearchView>
+
+                <Button
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorPrimary"
-                    android:minHeight="?attr/actionBarSize"
-                    android:theme="?attr/actionBarTheme"
-                    app:navigationIcon="?attr/actionModeCloseDrawable" />
-
-                <LinearLayout
-                    android:id="@+id/filters"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/searchLinearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <SearchView
-                            android:id="@+id/searchBar"
-                            android:layout_width="276dp"
-                            android:layout_height="match_parent">
-
-                        </SearchView>
-
-                        <Button
-                            android:id="@+id/searchButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:onClick="test"
-                            android:text="Search" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/dateLinearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/editTextArrival"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="Arrival"
-                            android:inputType="date" />
-
-                        <EditText
-                            android:id="@+id/editTextDep"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="Departure"
-                            android:inputType="date" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/priceLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/editMinPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="Min. Price"
-                            android:inputType="number"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textStyle="italic" />
-
-                        <EditText
-                            android:id="@+id/editMaxPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="Max. Price"
-                            android:inputType="number"
-                            android:textAlignment="center"
-                            android:textStyle="italic" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/revealLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/revealBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="filterReveal"
-                        android:text="HIDE FILTERS" />
-                </LinearLayout>
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="470dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/contentLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/hotelList"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </ScrollView>
+                    android:layout_weight="1"
+                    android:onClick="test"
+                    android:text="Search" />
 
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/dateLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    </androidx.core.widget.NestedScrollView>
+                <EditText
+                    android:id="@+id/editTextArrival"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Arrival"
+                    android:inputType="date" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:onClick="onClickAddHotel"
-        android:src="@android:drawable/ic_input_add" />"
+                <EditText
+                    android:id="@+id/editTextDep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Departure"
+                    android:inputType="date" />
+            </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <LinearLayout
+                android:id="@+id/priceLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editMinPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Min. Price"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textStyle="italic" />
+
+                <EditText
+                    android:id="@+id/editMaxPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Max. Price"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/capacityLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/capacityEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Room capacity (no. persons)"
+                    android:inputType="number" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/areaLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/sizeEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Room size (in sqf. )"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/chaineLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/chaineEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Hotel Chain (Ex. Sheraton, Salam, etc.)"
+                    android:inputType="textShortMessage" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/categoryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/categoryEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Hotel Category"
+                    android:inputType="number" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/revealLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/revealBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="filterReveal"
+                android:text="HIDE FILTERS" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/contentLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/hotelList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
