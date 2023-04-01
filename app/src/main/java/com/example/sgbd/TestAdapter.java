@@ -70,7 +70,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
             area = itemView.findViewById(R.id.viewSize);
             cNom = itemView.findViewById(R.id.viewChain);
             hNom = itemView.findViewById(R.id.hotelNameView);
-            cap = itemView.findViewById(R.id.viewSize);
+            cap = itemView.findViewById(R.id.viewCapacity);
             cat = itemView.findViewById(R.id.viewCategory);
             numCh = itemView.findViewById(R.id.viewRoomsNum);
 

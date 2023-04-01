@@ -28,20 +28,29 @@ import java.util.Locale;
 
 public class EmployeeActivity extends AppCompatActivity {
 
-    private static List<Test> mDataList;
+    public static List<Test> mDataList;
     public static TestAdapter mAdapter;
-    public static EditText min, max, arriv, dep;
+    public static EditText min, max, arriv, dep, capacity, area, cHot, cat, numCh;
 
     RecyclerView mRecyclerView;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employee);
+        setContentView(R.layout.activity_main);
         min = (EditText) findViewById(R.id.editMinPrice);
         max = (EditText) findViewById(R.id.editMaxPrice);
         arriv = (EditText)findViewById(R.id.editTextArrival);
         dep = (EditText) findViewById(R.id.editTextDep);
+        capacity = (EditText) findViewById(R.id.capacityEditText);
+        area = (EditText) findViewById(R.id.sizeEditText);
+        cHot = (EditText) findViewById(R.id.chaineEditText);
+        cat = (EditText) findViewById(R.id.categoryEditText);
+        numCh = (EditText) findViewById(R.id.capacityEditText);
+//have to set up the rest of the editText variables
+        Button hideShow = findViewById(R.id.revealBtn);
+
+        hideShow.setText("SHOW FILTERS");
 
 
         mDataList = new ArrayList<>();
@@ -94,7 +103,7 @@ public class EmployeeActivity extends AppCompatActivity {
     public static String getArrival(){
         String arrival = arriv.getText().toString(); // get the text entered by the user as a String
         if (arrival.isEmpty()) {
-            arrival = "0000-00-00"; // set a default value if the EditText is empty
+            arrival = "0001-01-01"; // set a default value if the EditText is empty
         }
         return arrival;
     }
@@ -105,7 +114,42 @@ public class EmployeeActivity extends AppCompatActivity {
         }
         return depart;
     }
+    public static String getCap(){
+        String c = capacity.getText().toString(); // get the text entered by the user as a String
+        if (c.isEmpty()) {
+            c = "0"; // set a default value if the EditText is empty
+        }
+        return c;
+    }
 
+    public static String getArea(){
+        String a = area.getText().toString(); // get the text entered by the user as a String
+        if (a.isEmpty()) {
+            a = "0"; // set a default value if the EditText is empty
+        }
+        return a;
+    }
+    public static String getChot(){
+        String cH = cHot.getText().toString(); // get the text entered by the user as a String
+        if (cH.isEmpty()) {
+            cH = ""; // set a default value if the EditText is empty
+        }
+        return cH;
+    }
+    public static String getCat(){
+        String ca = cat.getText().toString(); // get the text entered by the user as a String
+        if (ca.isEmpty()) {
+            ca = "0"; // set a default value if the EditText is empty
+        }
+        return ca;
+    }
+    public static String getnCh(){
+        String nCh = numCh.getText().toString(); // get the text entered by the user as a String
+        if (nCh.isEmpty()) {
+            nCh = "0"; // set a default value if the EditText is empty
+        }
+        return nCh;
+    }
 
 
 
@@ -139,37 +183,43 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
-        String price = null;
+        String price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
         String date = null;
-        String capacite=null;
-        String superficie =null;
+        String capacite=  capacite = " AND chambre.capacite >= "+ MainActivity.getCap();
+        String superficie =" AND chambre.superficie >= "+ MainActivity.getArea();
         String chaine = "";
         String numChambre = null;
-        String categorie = null;
-        String where ="";
+        String categorie = " etoile >= '"+ MainActivity.getCat()+"'";
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query1;
         String query2;
 
-
-        if(Integer.parseInt(MainActivity.getCap())<=0){
-            capacite = " AND chambre.capacite >= "+ MainActivity.getCap();
-        }
-        if(Double.parseDouble(MainActivity.getArea())<=0){
-            superficie = " AND chambre.superficie >= "+ MainActivity.getArea();
-        }
         if(!MainActivity.getChot().equals("")){//in query2
-            chaine = " AND temp.chaine_nom = "+MainActivity.getChot();
+            chaine = " AND chaine_nom = '"+MainActivity.getChot()+"'";
         }
-        if(Integer.parseInt(MainActivity.getnCh())<=0){//in query2
-            numChambre = " temp.nombre_chambre >= "+ MainActivity.getnCh();
+
+        if(Integer.parseInt(MainActivity.getCap())<0){
+            capacite = " AND chambre.capacite >= 0";
+        }
+
+
+        if(Double.parseDouble(MainActivity.getArea())<0){
+            superficie = " AND chambre.superficie >= 0";
+        }
+
+        if(Integer.parseInt(MainActivity.getnCh())<0){//in query2
+            numChambre = " nombre_chambre >= 0";
         }
         if(Integer.parseInt(MainActivity.getCat())<=0){//in query 2
-            categorie = " AND temp.etoile >= "+ MainActivity.getCat();
+            categorie = " etoile >= "+ MainActivity.getCat();
         }
         if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
             price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
         }//maybe an esle statement for an invalid entry
+        else{
+            price = " prix >= 0 AND prix <= 9999999999";
+        }
         try {
             if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
                 date = " arrive >= '"+MainActivity.getArrival() +"' AND depart <= '"+ MainActivity.getDeparture()+"'";
@@ -179,16 +229,16 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
             System.out.print("wrong date format");
         }
 
-        if(!(chaine.equals("")&&numChambre.equals(null)&&categorie.equals(null))){
-            where = " WHERE "+ numChambre + categorie +chaine ;
-        }
+
+        String where = " WHERE "+ categorie +chaine ;
+
 
         //create temporary table later to be used by the hotel table
         query1 = "CREATE TEMPORARY TABLE temp AS\n"+
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
                 "FROM chambre\n"+
                 "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "WHERE " + price + " AND " + date + " AND chambre.capacite >"+ capacite;
+                "WHERE " + price + " AND " + date + capacite;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search

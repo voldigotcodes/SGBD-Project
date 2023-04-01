@@ -191,37 +191,43 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
-        String price = null;
+        String price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
         String date = null;
-        String capacite=null;
-        String superficie =null;
+        String capacite=  capacite = " AND chambre.capacite >= "+ MainActivity.getCap();
+        String superficie =" AND chambre.superficie >= "+ MainActivity.getArea();
         String chaine = "";
         String numChambre = null;
-        String categorie = null;
+        String categorie = " etoile >= '"+ MainActivity.getCat()+"'";
         String where ="";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String query1;
         String query2;
 
-
-        if(Integer.parseInt(MainActivity.getCap())<=0){
-            capacite = " AND chambre.capacite >= "+ MainActivity.getCap();
-        }
-        if(Double.parseDouble(MainActivity.getArea())<=0){
-            superficie = " AND chambre.superficie >= "+ MainActivity.getArea();
-        }
         if(!MainActivity.getChot().equals("")){//in query2
-            chaine = " AND temp.chaine_nom = "+MainActivity.getChot();
+            chaine = " AND chaine_nom = '"+MainActivity.getChot()+"'";
         }
-        if(Integer.parseInt(MainActivity.getnCh())<=0){//in query2
-            numChambre = " nombre_chambre >= "+ MainActivity.getnCh();
+
+       if(Integer.parseInt(MainActivity.getCap())<0){
+            capacite = " AND chambre.capacite >= 0";
+        }
+
+
+        if(Double.parseDouble(MainActivity.getArea())<0){
+            superficie = " AND chambre.superficie >= 0";
+        }
+
+        if(Integer.parseInt(MainActivity.getnCh())<0){//in query2
+            numChambre = " nombre_chambre >= 0";
         }
         if(Integer.parseInt(MainActivity.getCat())<=0){//in query 2
-            categorie = " AND etoile >= "+ MainActivity.getCat();
+            categorie = " etoile >= "+ MainActivity.getCat();
         }
         if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
             price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
         }//maybe an esle statement for an invalid entry
+        else{
+            price = " prix >= 0 AND prix <= 9999999999";
+        }
         try {
             if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
                 date = " arrive >= '"+MainActivity.getArrival() +"' AND depart <= '"+ MainActivity.getDeparture()+"'";
@@ -231,16 +237,16 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
             System.out.print("wrong date format");
         }
 
-        if(!(chaine.equals("")&&numChambre.equals(null)&&categorie.equals(null))){
-            where = " WHERE "+ numChambre + categorie +chaine ;
-        }
+
+            where = " WHERE "+ categorie +chaine ;
+
 
         //create temporary table later to be used by the hotel table
         query1 = "CREATE TEMPORARY TABLE temp AS\n"+
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
                 "FROM chambre\n"+
                 "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "WHERE " + price + " AND " + date + capacite;
+                "WHERE " + price + " AND " + date + capacite + superficie;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
@@ -248,6 +254,7 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 "    FROM hotel\n" +
                 "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
         System.out.println("query2: "+query2);
+        System.out.println("nch: " + MainActivity.getCap());
 
 
 
