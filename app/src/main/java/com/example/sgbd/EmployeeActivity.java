@@ -163,7 +163,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
     public void testEmp(View view){
 
-        new DatabaseTask(mDataList).execute();
+        new EmployeeDatabaseTask(mDataList).execute();
         Toast toast = Toast.makeText(getApplicationContext(),"MIN: "+getMin()+ " MAX: "+getMax(), Toast.LENGTH_SHORT);
         toast.show();
 
@@ -292,7 +292,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
-        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
+        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie\n" +
                 "    FROM hotel\n" +
                 "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
         System.out.println("query2: "+query2);
