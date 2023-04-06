@@ -4,7 +4,6 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
 import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -20,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -47,18 +45,18 @@ public class EmployeeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        min = (EditText) findViewById(R.id.editMinPrice);
-        max = (EditText) findViewById(R.id.editMaxPrice);
-        arriv = (EditText)findViewById(R.id.editTextArrival);
-        dep = (EditText) findViewById(R.id.editTextDep);
-        capacity = (EditText) findViewById(R.id.capacityEditText);
-        area = (EditText) findViewById(R.id.sizeEditText);
-        cHot = (EditText) findViewById(R.id.chaineEditText);
-        cat = (EditText) findViewById(R.id.categoryEditText);
-        numCh = (EditText) findViewById(R.id.capacityEditText);
+        setContentView(R.layout.activity_employee);
+        min = (EditText) findViewById(R.id.editMinPriceEmp);
+        max = (EditText) findViewById(R.id.editMaxPriceEmp);
+        arriv = (EditText)findViewById(R.id.editTextArrivalEmp);
+        dep = (EditText) findViewById(R.id.editTextDepEmp);
+        capacity = (EditText) findViewById(R.id.capacityEditTextEmp);
+        area = (EditText) findViewById(R.id.sizeEditTextEmp);
+        cHot = (EditText) findViewById(R.id.chaineEditTextEmp);
+        cat = (EditText) findViewById(R.id.categoryEditTextEmp);
+        numCh = (EditText) findViewById(R.id.capacityEditTextEmp);
 //have to set up the rest of the editText variables
-        Button hideShow = findViewById(R.id.revealBtn);
+        Button hideShow = findViewById(R.id.revealBtnEmp);
 
         hideShow.setText("SHOW FILTERS");
 
@@ -81,11 +79,11 @@ public class EmployeeActivity extends AppCompatActivity {
     }
 
     public void filterReveal(View view){
-        Button hideShow = findViewById(R.id.revealBtn);
+        Button hideShow = findViewById(R.id.revealBtnEmp);
         View filters = findViewById(R.id.filters);
         ViewGroup.LayoutParams params = filters.getLayoutParams();
         if(hideShow.getText().toString().toUpperCase(Locale.ROOT).startsWith("H")) {
-            params.height = findViewById(R.id.searchLinearLayout).getHeight();
+            params.height = findViewById(R.id.searchLinearLayoutE).getHeight();
             hideShow.setText("SHOW FILTERS");
         } else{
             params.height = WRAP_CONTENT;
@@ -114,14 +112,14 @@ public class EmployeeActivity extends AppCompatActivity {
     public static String getArrival(){
         String arrival = arriv.getText().toString(); // get the text entered by the user as a String
         if (arrival.isEmpty()) {
-            arrival = "0001-01-01"; // set a default value if the EditText is empty
+            arrival = "0001/01/01"; // set a default value if the EditText is empty
         }
         return arrival;
     }
     public static String getDeparture(){
         String depart = dep.getText().toString(); // get the text entered by the user as a String
         if (depart.isEmpty()) {
-            depart = "9999-12-31"; // set a default value if the EditText is empty
+            depart = "9999/12/31"; // set a default value if the EditText is empty
         }
         return depart;
     }
@@ -163,7 +161,7 @@ public class EmployeeActivity extends AppCompatActivity {
     }
 
 
-    public void test(View view){
+    public void testEmp(View view){
 
         new DatabaseTask(mDataList).execute();
         Toast toast = Toast.makeText(getApplicationContext(),"MIN: "+getMin()+ " MAX: "+getMax(), Toast.LENGTH_SHORT);
@@ -230,46 +228,46 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
-        String price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
+        String price = " prix >= " + EmployeeActivity.getMin() + " AND prix <= " + EmployeeActivity.getMax();
         String date = null;
-        String capacite=  capacite = " AND chambre.capacite >= "+ MainActivity.getCap();
-        String superficie =" AND chambre.superficie >= "+ MainActivity.getArea();
+        String capacite=  capacite = " AND chambre.capacite >= "+ EmployeeActivity.getCap();
+        String superficie =" AND chambre.superficie >= "+ EmployeeActivity.getArea();
         String chaine = "";
         String numChambre = null;
-        String categorie = " etoile >= '"+ MainActivity.getCat()+"'";
+        String categorie = " etoile >= '"+ EmployeeActivity.getCat()+"'";
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String query1;
         String query2;
 
-        if(!MainActivity.getChot().equals("")){//in query2
-            chaine = " AND chaine_nom = '"+MainActivity.getChot()+"'";
+        if(!EmployeeActivity.getChot().equals("")){//in query2
+            chaine = " AND chaine_nom = '"+EmployeeActivity.getChot()+"'";
         }
 
-        if(Integer.parseInt(MainActivity.getCap())<0){
+        if(Integer.parseInt(EmployeeActivity.getCap())<0){
             capacite = " AND chambre.capacite >= 0";
         }
 
 
-        if(Double.parseDouble(MainActivity.getArea())<0){
+        if(Double.parseDouble(EmployeeActivity.getArea())<0){
             superficie = " AND chambre.superficie >= 0";
         }
 
-        if(Integer.parseInt(MainActivity.getnCh())<0){//in query2
+        if(Integer.parseInt(EmployeeActivity.getnCh())<0){//in query2
             numChambre = " nombre_chambre >= 0";
         }
-        if(Integer.parseInt(MainActivity.getCat())<=0){//in query 2
-            categorie = " etoile >= "+ MainActivity.getCat();
+        if(Integer.parseInt(EmployeeActivity.getCat())<=0){//in query 2
+            categorie = " etoile >= "+ EmployeeActivity.getCat();
         }
-        if (Integer.parseInt(MainActivity.getMin()) < Integer.parseInt(MainActivity.getMax())) {// checks if the min is less than the max
-            price = " prix >= " + MainActivity.getMin() + " AND prix <= " + MainActivity.getMax();
+        if (Integer.parseInt(EmployeeActivity.getMin()) < Integer.parseInt(EmployeeActivity.getMax())) {// checks if the min is less than the max
+            price = " prix >= " + EmployeeActivity.getMin() + " AND prix <= " + EmployeeActivity.getMax();
         }//maybe an esle statement for an invalid entry
         else{
             price = " prix >= 0 AND prix <= 9999999999";
         }
         try {
-            if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
-                date = " arrive >= '"+MainActivity.getArrival() +"' AND depart <= '"+ MainActivity.getDeparture()+"'";
+            if(dateFormat.parse(EmployeeActivity.getArrival()).before(dateFormat.parse(EmployeeActivity.getDeparture()))){//checks if the arrival is before departure
+                date = " arrive >= '"+EmployeeActivity.getArrival() +"' AND depart <= '"+ EmployeeActivity.getDeparture()+"'";
             }
         }
         catch(Exception e){
@@ -281,11 +279,16 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
 
         //create temporary table later to be used by the hotel table
-        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
+        /*query1 = "CREATE TEMPORARY TABLE temp AS\n"+
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
                 "FROM chambre\n"+
                 "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
                 "WHERE " + price + " AND " + date + capacite;
+        System.out.println("query1: "+query1);*/
+        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
+                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite\n " +
+                "FROM chambre\n"+
+                "WHERE " + price + capacite + superficie;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search

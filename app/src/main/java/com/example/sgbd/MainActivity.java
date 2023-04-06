@@ -6,45 +6,32 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintSet;
+
 import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.Layout;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.BreakIterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -127,14 +114,14 @@ public class MainActivity extends AppCompatActivity {
     public static String getArrival(){
         String arrival = arriv.getText().toString(); // get the text entered by the user as a String
         if (arrival.isEmpty()) {
-            arrival = "0001-01-01"; // set a default value if the EditText is empty
+            arrival = "0001/01/01"; // set a default value if the EditText is empty
         }
         return arrival;
     }
     public static String getDeparture(){
         String depart = dep.getText().toString(); // get the text entered by the user as a String
         if (depart.isEmpty()) {
-            depart = "9999-12-31"; // set a default value if the EditText is empty
+            depart = "9999/12/31"; // set a default value if the EditText is empty
         }
         return depart;
     }

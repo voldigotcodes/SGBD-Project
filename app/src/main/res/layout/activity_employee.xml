@@ -27,36 +27,36 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/searchLinearLayout"
+                android:id="@+id/searchLinearLayoutE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <SearchView
-                    android:id="@+id/searchBar"
+                    android:id="@+id/searchBarE"
                     android:layout_width="217dp"
                     android:layout_height="match_parent">
 
                 </SearchView>
 
                 <Button
-                    android:id="@+id/searchButton"
+                    android:id="@+id/searchButtonEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="test"
+                    android:onClick="testEmp"
                     android:text="Search" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/dateLinearLayout"
+                android:id="@+id/dateLinearLayoutE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editTextArrival"
+                    android:id="@+id/editTextArrivalEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -65,7 +65,7 @@
                     android:inputType="date" />
 
                 <EditText
-                    android:id="@+id/editTextDep"
+                    android:id="@+id/editTextDepEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -75,13 +75,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/priceLayout"
+                android:id="@+id/priceLayoutE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editMinPrice"
+                    android:id="@+id/editMinPriceEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -93,7 +93,7 @@
                     android:textStyle="italic" />
 
                 <EditText
-                    android:id="@+id/editMaxPrice"
+                    android:id="@+id/editMaxPriceEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -105,13 +105,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/capacityLayout"
+                android:id="@+id/capacityLayoutE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/capacityEditText"
+                    android:id="@+id/capacityEditTextEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -122,13 +122,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/areaLayout"
+                android:id="@+id/areaLayoutE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/sizeEditText"
+                    android:id="@+id/sizeEditTextEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -138,13 +138,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/chaineLayout"
+                android:id="@+id/chaineLayoutE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/chaineEditText"
+                    android:id="@+id/chaineEditTextEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -154,13 +154,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/categoryLayout"
+                android:id="@+id/categoryLayoutE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/categoryEditText"
+                    android:id="@+id/categoryEditTextEmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -171,13 +171,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/revealLayout"
+            android:id="@+id/revealLayoutE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/revealBtn"
+                android:id="@+id/revealBtnEmp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="filterReveal"
