@@ -228,7 +228,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
-        String price = " prix >= " + EmployeeActivity.getMin() + " AND prix <= " + EmployeeActivity.getMax();
+        String price = null;
         String date = null;
         String capacite=  capacite = " AND chambre.capacite >= "+ EmployeeActivity.getCap();
         String superficie =" AND chambre.superficie >= "+ EmployeeActivity.getArea();
@@ -267,7 +267,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         }
         try {
             if(dateFormat.parse(EmployeeActivity.getArrival()).before(dateFormat.parse(EmployeeActivity.getDeparture()))){//checks if the arrival is before departure
-                date = " arrive >= '"+EmployeeActivity.getArrival() +"' AND depart <= '"+ EmployeeActivity.getDeparture()+"'";
+                date = " '"+EmployeeActivity.getArrival() +"'> depart AND '"+ EmployeeActivity.getDeparture()+"'< arrive"+ " OR (arrive IS NULL AND depart IS NULL)";
             }
         }
         catch(Exception e){
@@ -288,13 +288,14 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         query1 = "CREATE TEMPORARY TABLE temp AS\n"+
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite\n " +
                 "FROM chambre\n"+
-                "WHERE " + price + capacite + superficie;
+                "\tLeft JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n"+
+                "WHERE "+ date + capacite + superficie;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
         query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie\n" +
                 "    FROM hotel\n" +
-                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
+                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where + " AND "+ price ;
         System.out.println("query2: "+query2);
 
 

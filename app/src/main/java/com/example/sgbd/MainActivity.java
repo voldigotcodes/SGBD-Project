@@ -265,7 +265,7 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         String numChambre = null;
         String categorie = " etoile >= '"+ MainActivity.getCat()+"'";
         String where ="";
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String query1;
         String query2;
 
@@ -296,7 +296,8 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         }
         try {
             if(dateFormat.parse(MainActivity.getArrival()).before(dateFormat.parse(MainActivity.getDeparture()))){//checks if the arrival is before departure
-                date = " arrive >= '"+MainActivity.getArrival() +"' AND depart <= '"+ MainActivity.getDeparture()+"'";
+                date = " AND '"+MainActivity.getArrival() +"'> depart AND '"+ MainActivity.getDeparture()+"'< arrive"+ " OR (arrive IS NULL AND depart IS NULL)";
+                //AND '2023-12-31'> depart AND '2022-12-31'< arrive OR (arrive IS NULL AND depart IS NULL)
             }
         }
         catch(Exception e){
@@ -308,11 +309,11 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
 
         //create temporary table later to be used by the hotel table
-//        query1 = "CREATE TEMPORARY TABLE temp AS\n"+
-//                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
-//                "FROM chambre\n"+
-//                "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-//                "WHERE " + price + " AND " + date + capacite + superficie;
+//         CREATE TEMPORARY TABLE temp AS
+//SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart
+//    FROM chambre
+//	Left JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre
+//	WHERE prix >=500 AND prix <= 2000 AND '2023-12-31'> depart AND '2022-12-31'< arrive OR (arrive IS NULL AND depart IS NULL)
 //        System.out.println("query1: "+query1);
 //
 //        //query returning the end result of the search
@@ -322,13 +323,14 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         query1 = "CREATE TEMPORARY TABLE temp AS\n"+
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite\n " +
                 "FROM chambre\n"+
-                "WHERE " + price + capacite + superficie;
+                "\tLeft JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n"+
+                "WHERE " + price + date + capacite + superficie;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
         query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie\n" +
                 "    FROM hotel\n" +
-                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
+                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where +" AND "+ price;
         System.out.println("query2: "+query2);
         System.out.println("nch: " + MainActivity.getCap());
 
