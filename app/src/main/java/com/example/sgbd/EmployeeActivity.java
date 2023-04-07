@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -39,6 +40,8 @@ public class EmployeeActivity extends AppCompatActivity {
     public static List<Test> mDataList;
     public static TestAdapter mAdapter;
     public static EditText min, max, arriv, dep, capacity, area, cHot, cat, numCh;
+    public static Test itemOn;
+    public static int posClicked;
 
     RecyclerView mRecyclerView;
     @SuppressLint("MissingInflatedId")
@@ -190,7 +193,7 @@ public class EmployeeActivity extends AppCompatActivity {
         // Show the date range picker in a popup dialog
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
         alertDialogBuilder.setView(dialogView);
-        alertDialogBuilder.setTitle("Update Hotel Information");
+        alertDialogBuilder.setTitle("Update Room Information");
 
 
         alertDialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
@@ -205,11 +208,32 @@ public class EmployeeActivity extends AppCompatActivity {
 
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
+        EditText addy = alert.findViewById(R.id.address);
+        EditText nom = alert.findViewById(R.id.nom);
+        EditText email = alert.findViewById(R.id.email);
+        EditText nombreChambre = alert.findViewById(R.id.nombreChambre);
+        EditText phone = alert.findViewById(R.id.phone);
+        EditText nChaine = alert.findViewById(R.id.nChaine);
+        RatingBar ratingBar2 = alert.findViewById(R.id.ratingBar2);
+
+        Test t = mDataList.get(posClicked);
+
+        nom.setText(t.gethNom());
+        nombreChambre.setText(t.getCap());
+        nChaine.setText(t.getcNom());
+        ratingBar2.setRating((float) t.getCat());
+
+
+
     }
 
     public void onClickAddHotel(View view){
         Intent i = new Intent(getApplicationContext(), AddHotelActivity.class);
         startActivity(i);
+    }
+
+    public static void getHotelFromButton(Test test){
+               itemOn = test;
     }
 }
 
@@ -313,9 +337,10 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 String ch = resultSet.getString("chaine_nom");
                 String hnom = resultSet.getString("hnom");
                 int nChambre = resultSet.getInt("nombre_chambre");
+                String addresse = resultSet.getString("adresse");
                 System.out.println("executed:"+ done);
 
-                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf));
+                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf, addresse));
             }
 
         } catch (SQLException e) {

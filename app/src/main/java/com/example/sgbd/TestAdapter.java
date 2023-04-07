@@ -42,7 +42,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
     @Override
     public void onBindViewHolder(@NonNull TestViewHolder holder, int position) {
         Test test = mTests.get(position);
-
         holder.price.setText(String.valueOf(test.getPrix()));
         holder.capacity.setText(String.valueOf(test.getCap()));
         holder.area.setText(String.valueOf(test.getSup()));
@@ -53,6 +52,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
         holder.cap.setText(String.valueOf(test.getCap()));
         holder.numCh.setText(String.valueOf(test.getNumCh()));
+
+        EmployeeActivity.getHotelFromButton(test);
 
     }
 
@@ -79,8 +80,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
         public RatingBar etoile;
 
-        public Button confirm;
-
         public TestViewHolder(@NonNull View itemView) {
             super(itemView);
             price = itemView.findViewById(R.id.viewPrice);
@@ -93,6 +92,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
             numCh = itemView.findViewById(R.id.viewRoomsNum);
             etoile = itemView.findViewById(R.id.ratingBar3);
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -102,6 +102,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
                     if(view.getContext().getClass() == EmployeeActivity.class) {
                         EmployeeActivity.showUpdateHotelPopup(view);
+
+
                     }
 
                 }
