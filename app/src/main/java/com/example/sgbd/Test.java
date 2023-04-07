@@ -13,10 +13,11 @@ public class Test {
     int numCh;
     double prix;
     double sup;
+    String hadresse;
 
     public Test(){}
 
-    public Test(String cNom, String hNom, double cat, int cap, int numch, double prix, double sup) {
+    public Test(String cNom, String hNom, double cat, int cap, int numch, double prix, double sup, String hadresse) {
         this.cNom = cNom;
         this.hNom = hNom;
         this.cat = cat;
@@ -24,6 +25,7 @@ public class Test {
         this.numCh = numch;
         this.prix = prix;
         this.sup = sup;
+        this.hadresse = hadresse;
 
     }
 
@@ -54,4 +56,6 @@ public class Test {
     public double getSup() {
         return sup;
     }
+
+    public String gethAd(){return hadresse;}
 }

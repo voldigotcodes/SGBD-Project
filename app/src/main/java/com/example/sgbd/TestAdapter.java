@@ -1,5 +1,6 @@
 package com.example.sgbd;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,32 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_item_layout, parent, false);
         return new TestViewHolder(view);
     }
+/*  private List<MyModel> mData;
 
+    // constructor and other adapter methods
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView mTextView;
+        private Context mContext;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mTextView = (TextView) itemView.findViewById(R.id.text_view);
+            mContext = itemView.getContext();
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            MyModel model = mData.get(position);
+
+            Intent intent = new Intent(mContext, MyNewActivity.class);
+            intent.putExtra("key", model.getData());
+            mContext.startActivity(intent);
+        }
+    }*/
     @Override
     public void onBindViewHolder(@NonNull TestViewHolder holder, int position) {
         Test test = mTests.get(position);
@@ -53,6 +79,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
         holder.cap.setText(String.valueOf(test.getCap()));
         holder.numCh.setText(String.valueOf(test.getNumCh()));
+        holder.adressHotel.setText(String.valueOf(test.gethAd()));
+
 
     }
 
@@ -78,11 +106,32 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         public TextView numCh;
 
         public RatingBar etoile;
+        public TextView adressHotel;
 
         public Button confirm;
+        private Context mContext;
+/* private TextView mTextView;
+        private Context mContext;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mTextView = (TextView) itemView.findViewById(R.id.text_view);
+            mContext = itemView.getContext();
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            MyModel model = mData.get(position);
+
+            Intent intent = new Intent(mContext, MyNewActivity.class);
+            intent.putExtra("key", model.getData());
+            mContext.startActivity(intent);*/
 
         public TestViewHolder(@NonNull View itemView) {
             super(itemView);
+
             price = itemView.findViewById(R.id.viewPrice);
             capacity = itemView.findViewById(R.id.viewCapacity);
             area = itemView.findViewById(R.id.viewSize);
@@ -92,12 +141,17 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
             cat = itemView.findViewById(R.id.viewCategory);
             numCh = itemView.findViewById(R.id.viewRoomsNum);
             etoile = itemView.findViewById(R.id.ratingBar3);
-
+            adressHotel = itemView.findViewById(R.id.adressView);
+            mContext = itemView.getContext();
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(view.getContext().getClass() == MainActivity.class) {
-                        MainActivity.showDatePickerPopup(view);
+
+                        Intent intent = new Intent(mContext, makeReservation.class);
+                        intent.putExtra("Adresse", adressHotel.getText().toString());
+                        intent.putExtra("No. chambre", numCh.getText().toString());
+                        mContext.startActivity(intent);
                     }
 
                     if(view.getContext().getClass() == EmployeeActivity.class) {

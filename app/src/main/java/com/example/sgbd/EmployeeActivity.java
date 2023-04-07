@@ -293,7 +293,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
-        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie\n" +
+        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie, hotel.hadresse\n" +
                 "    FROM hotel\n" +
                 "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where + " AND "+ price ;
         System.out.println("query2: "+query2);
@@ -313,9 +313,10 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 String ch = resultSet.getString("chaine_nom");
                 String hnom = resultSet.getString("hnom");
                 int nChambre = resultSet.getInt("nombre_chambre");
+                String ad = resultSet.getString("hadresse");
                 System.out.println("executed:"+ done);
 
-                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf));
+                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf, ad));
             }
 
         } catch (SQLException e) {
