@@ -40,8 +40,6 @@ public class EmployeeActivity extends AppCompatActivity {
     public static List<Test> mDataList;
     public static TestAdapter mAdapter;
     public static EditText min, max, arriv, dep, capacity, area, cHot, cat, numCh;
-    public static Test itemOn;
-    public static int posClicked;
 
     RecyclerView mRecyclerView;
     @SuppressLint("MissingInflatedId")
@@ -78,6 +76,9 @@ public class EmployeeActivity extends AppCompatActivity {
 
         // set adapter
         mRecyclerView.setAdapter(mAdapter);
+
+        //Fetch all the data the first time
+        new EmployeeDatabaseTask(mDataList, mAdapter).execute();
 
     }
 
@@ -166,13 +167,17 @@ public class EmployeeActivity extends AppCompatActivity {
 
     public void testEmp(View view){
 
-        new EmployeeDatabaseTask(mDataList).execute();
+        new EmployeeDatabaseTask(mDataList, mAdapter).execute();
         Toast toast = Toast.makeText(getApplicationContext(),"MIN: "+getMin()+ " MAX: "+getMax(), Toast.LENGTH_SHORT);
         toast.show();
 
     }
 
-    public static void showUpdateHotelPopup(View view) {
+    public static void showUpdateHotelPopup(View view, String addy,
+                                            String nom,
+                                            String nombreChambre,
+                                            String nChaine,
+                                            int ratingBar2, String phone, String email) {
         // Create a MaterialDatePicker object for the date range picker\
         FragmentManager fragmentManager = ((FragmentActivity) view.getContext()).getSupportFragmentManager();
         MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
@@ -196,35 +201,59 @@ public class EmployeeActivity extends AppCompatActivity {
         alertDialogBuilder.setTitle("Update Room Information");
 
 
+        EditText addressEdit = dialogView.findViewById(R.id.address);
+        EditText nomEdit = dialogView.findViewById(R.id.nom);
+        EditText emailEdit = dialogView.findViewById(R.id.email);
+        EditText nombreChambreEdit = dialogView.findViewById(R.id.nombreChambre);
+        EditText phoneEdit = dialogView.findViewById(R.id.phone);
+        EditText nChaineEdit = dialogView.findViewById(R.id.nChaine);
+        RatingBar ratingBar2Edit = dialogView.findViewById(R.id.ratingBar2);
+        Button deleteButton = dialogView.findViewById(R.id.deleteHotel);
+
+        addressEdit.setText(addy);
+        nomEdit.setText(nom);
+        nombreChambreEdit.setText(nombreChambre);
+        nChaineEdit.setText(nChaine);
+        ratingBar2Edit.setRating(ratingBar2);
+        phoneEdit.setText(phone);
+        emailEdit.setText(email);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DeleteHotelTask(addressEdit.getText().toString(), nomEdit.getText().toString(),
+                        nombreChambreEdit.getText().toString(), nChaineEdit.getText().toString(),
+                        (int) ratingBar2Edit.getRating(), phoneEdit.getText().toString(), emailEdit.getText().toString()).execute();
+                Toast.makeText(dialogView.getContext(), "You have succesfully deleted this hotel, please refresh!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
         alertDialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
             // if the info has been filled out correctly then send it else return a toast
-
+            if(!addressEdit.getText().toString().isEmpty() && !nomEdit.getText().toString().isEmpty()
+                    && !nombreChambreEdit.getText().toString().isEmpty() && !nChaineEdit.getText().toString().isEmpty()){
+                new UpdateHotelTask(addressEdit.getText().toString(), nomEdit.getText().toString(),
+                        nombreChambreEdit.getText().toString(), nChaineEdit.getText().toString(),
+                        (int) ratingBar2Edit.getRating(), phoneEdit.getText().toString(), emailEdit.getText().toString()).execute();
+                Toast.makeText(dialogView.getContext(), "You succuesfully updated this hotel", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(dialogView.getContext(), "You have not filled out the form correctly", Toast.LENGTH_SHORT).show();
+            }
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
             // Do something when the "Cancel" button is clicked
         });
+
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
 
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-        EditText addy = alert.findViewById(R.id.address);
-        EditText nom = alert.findViewById(R.id.nom);
-        EditText email = alert.findViewById(R.id.email);
-        EditText nombreChambre = alert.findViewById(R.id.nombreChambre);
-        EditText phone = alert.findViewById(R.id.phone);
-        EditText nChaine = alert.findViewById(R.id.nChaine);
-        RatingBar ratingBar2 = alert.findViewById(R.id.ratingBar2);
+    }
 
-        Test t = mDataList.get(posClicked);
-
-        nom.setText(t.gethNom());
-        nombreChambre.setText(t.getCap());
-        nChaine.setText(t.getcNom());
-        ratingBar2.setRating((float) t.getCat());
-
-
-
+    public void onClickManagePeople(View view){
+        Intent i = new Intent(getApplicationContext(), ShowClients.class);
+        startActivity(i);
     }
 
     public void onClickAddHotel(View view){
@@ -232,19 +261,92 @@ public class EmployeeActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public static void getHotelFromButton(Test test){
-               itemOn = test;
+
+}
+class DeleteHotelTask extends AsyncTask<Void, Void, Void>{
+    String addy;
+    String nom;
+    String nombreChambre;
+    String nChaine;
+    int ratingBar2;
+    String phone;
+    String email;
+
+    public DeleteHotelTask(String addy, String nom, String nombreChambre, String nChaine, int ratingBar2, String phone, String email) {
+        this.addy = addy;
+        this.nom = nom;
+        this.nombreChambre = nombreChambre;
+        this.nChaine = nChaine;
+        this.ratingBar2 = ratingBar2;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        Database db = new Database();
+        Connection connection = db.getConnection();
+        Statement statement = null;
+        String query = "DELETE FROM hotel WHERE hotel.hadresse = '"+addy+"'";
+        System.out.println(query);
+        try {
+            statement = connection.createStatement();
+            statement.execute(query);
+            db.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
+class UpdateHotelTask extends AsyncTask<Void, Void, Void>{
+    String addy;
+    String nom;
+    String nombreChambre;
+    String nChaine;
+    int ratingBar2;
+    String phone;
+    String email;
 
+    public UpdateHotelTask(String addy, String nom, String nombreChambre, String nChaine, int ratingBar2, String phone, String email) {
+        this.addy = addy;
+        this.nom = nom;
+        this.nombreChambre = nombreChambre;
+        this.nChaine = nChaine;
+        this.ratingBar2 = ratingBar2;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        Database db = new Database();
+        Connection connection = db.getConnection();
+        Statement statement = null;
+        String query = "UPDATE hotel SET hnom = '"+nom+"', nombre_chambre = '"+nombreChambre+"', " +
+                "chaine_nom = '"+nChaine+"', etoile = "+ratingBar2+", hphone_number = '"+phone+"', hemiail = '"+email+"' WHERE hotel.hadresse = '"+addy+"'";
+        System.out.println(query);
+        try {
+            statement = connection.createStatement();
+            statement.execute(query);
+            db.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
 class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
 
     private List<Test> mDataList;
+    private TestAdapter adapter;
 
-    public EmployeeDatabaseTask(List<Test> dataList) {
+    public EmployeeDatabaseTask(List<Test> dataList, TestAdapter adapter) {
         mDataList = dataList;
+        this.adapter = adapter;
     }
 
+    @Override
     protected List<Test> doInBackground(Void... voids) {
         List<Test> dataList = new ArrayList<>();
 
@@ -252,14 +354,14 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
-        String price = null;
+        String price = " prix >= " + EmployeeActivity.getMin() + " AND prix <= " + EmployeeActivity.getMax();
         String date = null;
         String capacite=  capacite = " AND chambre.capacite >= "+ EmployeeActivity.getCap();
         String superficie =" AND chambre.superficie >= "+ EmployeeActivity.getArea();
         String chaine = "";
         String numChambre = null;
         String categorie = " etoile >= '"+ EmployeeActivity.getCat()+"'";
-
+        String where ="";
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String query1;
         String query2;
@@ -291,7 +393,8 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         }
         try {
             if(dateFormat.parse(EmployeeActivity.getArrival()).before(dateFormat.parse(EmployeeActivity.getDeparture()))){//checks if the arrival is before departure
-                date = " '"+EmployeeActivity.getArrival() +"'> depart AND '"+ EmployeeActivity.getDeparture()+"'< arrive"+ " OR (arrive IS NULL AND depart IS NULL)";
+                date = " AND '"+EmployeeActivity.getArrival() +"'> depart AND '"+ EmployeeActivity.getDeparture()+"'< arrive"+ " OR (arrive IS NULL AND depart IS NULL)";
+                //AND '2023-12-31'> depart AND '2022-12-31'< arrive OR (arrive IS NULL AND depart IS NULL)
             }
         }
         catch(Exception e){
@@ -299,28 +402,34 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         }
 
 
-        String where = " WHERE "+ categorie +chaine ;
+        where = " WHERE "+ categorie +chaine ;
 
 
         //create temporary table later to be used by the hotel table
-        /*query1 = "CREATE TEMPORARY TABLE temp AS\n"+
-                "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart\n " +
-                "FROM chambre\n"+
-                "\tINNER JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n" +
-                "WHERE " + price + " AND " + date + capacite;
-        System.out.println("query1: "+query1);*/
+//         CREATE TEMPORARY TABLE temp AS
+//SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite, location.arrive, location.depart
+//    FROM chambre
+//	Left JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre
+//	WHERE prix >=500 AND prix <= 2000 AND '2023-12-31'> depart AND '2022-12-31'< arrive OR (arrive IS NULL AND depart IS NULL)
+//        System.out.println("query1: "+query1);
+//
+//        //query returning the end result of the search
+//        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.arrive, temp.depart, temp.capacite, temp.superficie\n" +
+//                "    FROM hotel\n" +
+//                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where ;
         query1 = "CREATE TEMPORARY TABLE temp AS\n"+
                 "SELECT chambre.numero_chambre, chambre.prix, chambre.hadresse, chambre.superficie, chambre.capacite\n " +
                 "FROM chambre\n"+
                 "\tLeft JOIN location ON chambre.hadresse = location.hadresse AND chambre.numero_chambre = location.numero_chambre\n"+
-                "WHERE "+ date + capacite + superficie;
+                "WHERE " + price + date + capacite + superficie;
         System.out.println("query1: "+query1);
 
         //query returning the end result of the search
-        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie\n" +
+        query2 = "SELECT hnom, etoile, nombre_chambre, chaine_nom, temp.numero_chambre, temp.prix, temp.capacite, temp.superficie, hotel.hadresse, hotel.hphone_number, hotel.hemail\n" +
                 "    FROM hotel\n" +
-                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where + " AND "+ price ;
+                "\tINNER JOIN temp ON temp.hadresse = hotel.hadresse" + where +" AND "+ price;
         System.out.println("query2: "+query2);
+        System.out.println("nch: " + EmployeeActivity.getCap());
 
 
 
@@ -330,6 +439,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
             boolean done = statement.execute(query1);
             resultSet = statement.executeQuery(query2);
             while (resultSet.next()) {
+                String ad = resultSet.getString("hadresse");
                 double prix = resultSet.getDouble("prix");
                 int cap = resultSet.getInt("capacite");
                 double superf = resultSet.getDouble("superficie");
@@ -337,12 +447,12 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 String ch = resultSet.getString("chaine_nom");
                 String hnom = resultSet.getString("hnom");
                 int nChambre = resultSet.getInt("nombre_chambre");
-                String addresse = resultSet.getString("adresse");
+                String email = resultSet.getString("hemail");
+                String phone = resultSet.getString("hphone_number");
                 System.out.println("executed:"+ done);
 
-                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf, addresse));
+                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf, ad, phone, email));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -355,6 +465,6 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
         super.onPostExecute(dataList);
         mDataList.clear();
         mDataList.addAll(dataList);
-        EmployeeActivity.mAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 }

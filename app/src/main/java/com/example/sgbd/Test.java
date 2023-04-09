@@ -14,19 +14,34 @@ public class Test {
     double prix;
     double sup;
     String hadresse;
+    String phone;
+    String email;
 
     public Test(){}
 
-    public Test(String cNom, String hNom, double cat, int cap, int numch, double prix, double sup, String hadresse) {
+    public Test(String cNom, String hNom, double cat, int cap, int numCh, double prix, double sup, String hadresse, String phone, String email) {
         this.cNom = cNom;
         this.hNom = hNom;
         this.cat = cat;
         this.cap = cap;
-        this.numCh = numch;
+        this.numCh = numCh;
         this.prix = prix;
         this.sup = sup;
         this.hadresse = hadresse;
+        this.phone = phone;
+        this.email = email;
+    }
 
+    public String getHadresse() {
+        return hadresse;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getcNom() {

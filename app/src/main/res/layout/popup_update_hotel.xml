@@ -84,11 +84,10 @@
                     android:rating="4" />
 
                 <Button
-                    android:id="@+id/updateHotel"
+                    android:id="@+id/deleteHotel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="addHotel"
-                    android:text="update" />
+                    android:text="Delete" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

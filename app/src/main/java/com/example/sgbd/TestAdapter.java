@@ -76,10 +76,19 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         holder.cNom.setText(String.valueOf(test.getcNom()));
         holder.hNom.setText(String.valueOf(test.gethNom()));
         holder.etoile.setRating((float)test.getCat());
+        holder.etoile.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                holder.etoile.setRating((float)test.getCat());
+            }
+        });
 
         holder.cap.setText(String.valueOf(test.getCap()));
         holder.numCh.setText(String.valueOf(test.getNumCh()));
         holder.adressHotel.setText(String.valueOf(test.gethAd()));
+
+        holder.hphone = test.getPhone();
+        holder.hemail = test.getEmail();
 
 
     }
@@ -108,7 +117,9 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         public RatingBar etoile;
         public TextView adressHotel;
 
-        public Button confirm;
+        public String hphone;
+        public String hemail;
+
         private Context mContext;
 /* private TextView mTextView;
         private Context mContext;
@@ -142,6 +153,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
             numCh = itemView.findViewById(R.id.viewRoomsNum);
             etoile = itemView.findViewById(R.id.ratingBar3);
             adressHotel = itemView.findViewById(R.id.adressView);
+            hphone = "";
+            hemail = "";
             mContext = itemView.getContext();
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,7 +168,9 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
                     }
 
                     if(view.getContext().getClass() == EmployeeActivity.class) {
-                        EmployeeActivity.showUpdateHotelPopup(view);
+                        EmployeeActivity.showUpdateHotelPopup(view, adressHotel.getText().toString(), hNom.getText().toString(),
+                                numCh.getText().toString(), cNom.getText().toString(), etoile.getNumStars(), hphone, hemail);
+
                     }
 
                 }
