@@ -3,9 +3,14 @@ package com.example.sgbd;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,39 +21,27 @@ import java.util.List;
 
 public class ShowClients extends AppCompatActivity {
 
-    public static List<Client> mDataList;
-    public static ClientAdapter mAdapter;
-    RecyclerView mRecyclerView;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_clients);
 
-        mDataList = new ArrayList<>();
+        mViewPager = findViewById(R.id.viewPager);
+        mTabLayout = findViewById(R.id.tabs);
 
-        // create adapter
-        mAdapter = new ClientAdapter(mDataList);
+        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        mTabLayout.setupWithViewPager(mViewPager);
 
-        // get reference to RecyclerView
-        mRecyclerView = findViewById(R.id.recyclerView);
-
-        // set layout manager
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-
-        // set adapter
-        mRecyclerView.setAdapter(mAdapter);
-
-        //Fetch all the data the first time
-        new ClientDatabaseTask(mDataList, mAdapter).execute();
     }
 }
 
 class ClientDatabaseTask extends AsyncTask<Void, Void, List<Client>> {
 
-    private List<Client> mDataList;
-    private ClientAdapter adapter;
+    public static List<Client> mDataList;
+    public static ClientAdapter adapter;
 
     public ClientDatabaseTask(List<Client> dataList, ClientAdapter adapter) {
         mDataList = dataList;
@@ -89,6 +82,55 @@ class ClientDatabaseTask extends AsyncTask<Void, Void, List<Client>> {
         super.onPostExecute(dataList);
         mDataList.clear();
         mDataList.addAll(dataList);
+        adapter.notifyDataSetChanged();
+    }
+}
+
+class ManageEmployeeDatabaseTask extends AsyncTask<Void, Void, List<Employee>> {
+
+    private List<Employee> eDataList;
+    private EmployeeAdapter adapter;
+
+    public ManageEmployeeDatabaseTask(List<Employee> dataList, EmployeeAdapter adapter) {
+        eDataList = dataList;
+        this.adapter = adapter;
+    }
+
+    @Override
+    protected List<Employee> doInBackground(Void... voids) {
+        List<Employee> dataList = new ArrayList<>();
+
+        Database db = new Database();
+        Connection connection = db.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT * FROM employe";
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String nom = resultSet.getString("enom");
+                String sin = resultSet.getString("sin_e");
+                String role = resultSet.getString("role");
+                String adresse = resultSet.getString("eadresse");
+                String hAdresse = resultSet.getString("hadresse");
+                String passeword = resultSet.getString("epassword");
+                String email = resultSet.getString("employe_email");
+
+                dataList.add(new Employee(nom, sin, role, adresse, hAdresse, passeword, email));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    @Override
+    protected void onPostExecute(List<Employee> dataList) {
+        super.onPostExecute(dataList);
+        eDataList.clear();
+        eDataList.addAll(dataList);
         adapter.notifyDataSetChanged();
     }
 }
