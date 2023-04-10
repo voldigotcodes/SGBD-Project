@@ -37,8 +37,8 @@ import java.util.Locale;
 
 public class EmployeeActivity extends AppCompatActivity {
 
-    public static List<Test> mDataList;
-    public static TestAdapter mAdapter;
+    public static List<Hotel> mDataList;
+    public static HotelAdapter mAdapter;
     public static EditText min, max, arriv, dep, capacity, area, cHot, cat, numCh;
 
     RecyclerView mRecyclerView;
@@ -65,7 +65,7 @@ public class EmployeeActivity extends AppCompatActivity {
         mDataList = new ArrayList<>();
 
         // create adapter
-        mAdapter = new TestAdapter(mDataList);
+        mAdapter = new HotelAdapter(mDataList);
 
         // get reference to RecyclerView
         mRecyclerView = findViewById(R.id.hotelList);
@@ -221,9 +221,7 @@ public class EmployeeActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DeleteHotelTask(addressEdit.getText().toString(), nomEdit.getText().toString(),
-                        nombreChambreEdit.getText().toString(), nChaineEdit.getText().toString(),
-                        (int) ratingBar2Edit.getRating(), phoneEdit.getText().toString(), emailEdit.getText().toString()).execute();
+                new DeleteHotelTask(addressEdit.getText().toString()).execute();
                 Toast.makeText(dialogView.getContext(), "You have succesfully deleted this hotel, please refresh!", Toast.LENGTH_SHORT).show();
 
             }
@@ -233,7 +231,7 @@ public class EmployeeActivity extends AppCompatActivity {
             // if the info has been filled out correctly then send it else return a toast
             if(!addressEdit.getText().toString().isEmpty() && !nomEdit.getText().toString().isEmpty()
                     && !nombreChambreEdit.getText().toString().isEmpty() && !nChaineEdit.getText().toString().isEmpty()){
-                new UpdateHotelTask(addressEdit.getText().toString(), nomEdit.getText().toString(),
+                new UpdateHotelTask(addy, addressEdit.getText().toString(), nomEdit.getText().toString(),
                         nombreChambreEdit.getText().toString(), nChaineEdit.getText().toString(),
                         (int) ratingBar2Edit.getRating(), phoneEdit.getText().toString(), emailEdit.getText().toString()).execute();
                 Toast.makeText(dialogView.getContext(), "You succuesfully updated this hotel", Toast.LENGTH_SHORT).show();
@@ -265,21 +263,9 @@ public class EmployeeActivity extends AppCompatActivity {
 }
 class DeleteHotelTask extends AsyncTask<Void, Void, Void>{
     String addy;
-    String nom;
-    String nombreChambre;
-    String nChaine;
-    int ratingBar2;
-    String phone;
-    String email;
 
-    public DeleteHotelTask(String addy, String nom, String nombreChambre, String nChaine, int ratingBar2, String phone, String email) {
+    public DeleteHotelTask(String addy) {
         this.addy = addy;
-        this.nom = nom;
-        this.nombreChambre = nombreChambre;
-        this.nChaine = nChaine;
-        this.ratingBar2 = ratingBar2;
-        this.phone = phone;
-        this.email = email;
     }
 
     @Override
@@ -300,6 +286,7 @@ class DeleteHotelTask extends AsyncTask<Void, Void, Void>{
     }
 }
 class UpdateHotelTask extends AsyncTask<Void, Void, Void>{
+    String oldAddy;
     String addy;
     String nom;
     String nombreChambre;
@@ -308,7 +295,8 @@ class UpdateHotelTask extends AsyncTask<Void, Void, Void>{
     String phone;
     String email;
 
-    public UpdateHotelTask(String addy, String nom, String nombreChambre, String nChaine, int ratingBar2, String phone, String email) {
+    public UpdateHotelTask(String oldAddy, String addy, String nom, String nombreChambre, String nChaine, int ratingBar2, String phone, String email) {
+        this.oldAddy = oldAddy;
         this.addy = addy;
         this.nom = nom;
         this.nombreChambre = nombreChambre;
@@ -324,7 +312,7 @@ class UpdateHotelTask extends AsyncTask<Void, Void, Void>{
         Connection connection = db.getConnection();
         Statement statement = null;
         String query = "UPDATE hotel SET hnom = '"+nom+"', nombre_chambre = '"+nombreChambre+"', " +
-                "chaine_nom = '"+nChaine+"', etoile = "+ratingBar2+", hphone_number = '"+phone+"', hemiail = '"+email+"' WHERE hotel.hadresse = '"+addy+"'";
+                "chaine_nom = '"+nChaine+"', etoile = "+ratingBar2+", hphone_number = '"+phone+"', hemail = '"+email+"', hadresse = '"+addy+"'"+"' WHERE hotel.hadresse = '"+oldAddy+"'";
         System.out.println(query);
         try {
             statement = connection.createStatement();
@@ -336,19 +324,19 @@ class UpdateHotelTask extends AsyncTask<Void, Void, Void>{
         return null;
     }
 }
-class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
+class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Hotel>> {
 
-    private List<Test> mDataList;
-    private TestAdapter adapter;
+    private List<Hotel> mDataList;
+    private HotelAdapter adapter;
 
-    public EmployeeDatabaseTask(List<Test> dataList, TestAdapter adapter) {
+    public EmployeeDatabaseTask(List<Hotel> dataList, HotelAdapter adapter) {
         mDataList = dataList;
         this.adapter = adapter;
     }
 
     @Override
-    protected List<Test> doInBackground(Void... voids) {
-        List<Test> dataList = new ArrayList<>();
+    protected List<Hotel> doInBackground(Void... voids) {
+        List<Hotel> dataList = new ArrayList<>();
 
         Database db = new Database();
         Connection connection = db.getConnection();
@@ -451,7 +439,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 String phone = resultSet.getString("hphone_number");
                 System.out.println("executed:"+ done);
 
-                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf, ad, phone, email));
+                dataList.add(new Hotel(ch, hnom, cat, cap, nChambre, prix, superf, ad, phone, email));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -461,7 +449,7 @@ class EmployeeDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
     }
 
     @Override
-    protected void onPostExecute(List<Test> dataList) {
+    protected void onPostExecute(List<Hotel> dataList) {
         super.onPostExecute(dataList);
         mDataList.clear();
         mDataList.addAll(dataList);

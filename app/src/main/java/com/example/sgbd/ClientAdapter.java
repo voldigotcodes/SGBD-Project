@@ -69,7 +69,8 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    ClientFragment.showUpdatePopup(view, nom.getText().toString(), adresse.getText().toString(), Integer.parseInt(sin.getText().toString()),
+                            enregistrement.getText().toString(), email.getText().toString(), passeword);
 
                 }
             });

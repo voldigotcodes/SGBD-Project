@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,8 +22,8 @@ import java.util.List;
 import java.util.Random;
 
 public class makeReservation extends AppCompatActivity {
-    public static List<Test> mDataList;
-    public static TestAdapter mAdapter;
+    public static List<Hotel> mDataList;
+    public static HotelAdapter mAdapter;
     public static EditText nom, sin, ady, date, pass, email, arr, dep;
     public static TextView nch, adH;
 
@@ -105,17 +104,17 @@ public class makeReservation extends AppCompatActivity {
     }
 }
 
-    class ReservationDatabaseTask extends AsyncTask<Void, Void, List<Test>> {
+    class ReservationDatabaseTask extends AsyncTask<Void, Void, List<Hotel>> {
 
-        private List<Test> mDataList;
+        private List<Hotel> mDataList;
 
-        public ReservationDatabaseTask(List<Test> dataList) {
+        public ReservationDatabaseTask(List<Hotel> dataList) {
             mDataList = dataList;
         }
 
         @Override
-        protected List<Test> doInBackground(Void... voids) {
-            List<Test> dataList = new ArrayList<>();
+        protected List<Hotel> doInBackground(Void... voids) {
+            List<Hotel> dataList = new ArrayList<>();
 
             Database db = new Database();
             Connection connection = db.getConnection();

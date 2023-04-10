@@ -38,8 +38,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static List<Test> mDataList;
-    public static TestAdapter mAdapter;
+    public static List<Hotel> mDataList;
+    public static HotelAdapter mAdapter;
     public static EditText min, max, arriv, dep, capacity, area, cHot, cat, numCh;
 
     RecyclerView mRecyclerView;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         mDataList = new ArrayList<>();
 
         // create adapter
-        mAdapter = new TestAdapter(mDataList);
+        mAdapter = new HotelAdapter(mDataList);
 
         // get reference to RecyclerView
         mRecyclerView = findViewById(R.id.hotelList);
@@ -243,19 +243,19 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
-class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
+class DatabaseTask extends AsyncTask<Void, Void, List<Hotel>> {
 
-    private List<Test> mDataList;
-    private TestAdapter adapter;
+    private List<Hotel> mDataList;
+    private HotelAdapter adapter;
 
-    public DatabaseTask(List<Test> dataList, TestAdapter adapter) {
+    public DatabaseTask(List<Hotel> dataList, HotelAdapter adapter) {
         mDataList = dataList;
         this.adapter = adapter;
     }
 
     @Override
-    protected List<Test> doInBackground(Void... voids) {
-        List<Test> dataList = new ArrayList<>();
+    protected List<Hotel> doInBackground(Void... voids) {
+        List<Hotel> dataList = new ArrayList<>();
 
         Database db = new Database();
         Connection connection = db.getConnection();
@@ -358,7 +358,7 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
                 String email = resultSet.getString("hemail");
                 System.out.println("executed:"+ done);
 
-                dataList.add(new Test(ch, hnom, cat, cap, nChambre, prix, superf, ad, phone, email));
+                dataList.add(new Hotel(ch, hnom, cat, cap, nChambre, prix, superf, ad, phone, email));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -368,7 +368,7 @@ class DatabaseTask extends AsyncTask<Void, Void, List<Test>> {
     }
 
     @Override
-    protected void onPostExecute(List<Test> dataList) {
+    protected void onPostExecute(List<Hotel> dataList) {
         super.onPostExecute(dataList);
         mDataList.clear();
         mDataList.addAll(dataList);

@@ -5,32 +5,20 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.util.Pair;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
-public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder> {
+public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.TestViewHolder> {
 
-    private List<Test> mTests;
+    private List<Hotel> mHotels;
 
-    public TestAdapter(List<Test> tests) {
-        mTests = tests;
+    public HotelAdapter(List<Hotel> hotels) {
+        mHotels = hotels;
     }
 
     @NonNull
@@ -67,38 +55,38 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
     }*/
     @Override
     public void onBindViewHolder(@NonNull TestViewHolder holder, int position) {
-        Test test = mTests.get(position);
+        Hotel hotel = mHotels.get(position);
 
-        holder.price.setText(String.valueOf(test.getPrix()));
-        holder.capacity.setText(String.valueOf(test.getCap()));
-        holder.area.setText(String.valueOf(test.getSup()));
+        holder.price.setText(String.valueOf(hotel.getPrix()));
+        holder.capacity.setText(String.valueOf(hotel.getCap()));
+        holder.area.setText(String.valueOf(hotel.getSup()));
 
-        holder.cNom.setText(String.valueOf(test.getcNom()));
-        holder.hNom.setText(String.valueOf(test.gethNom()));
-        holder.etoile.setRating((float)test.getCat());
+        holder.cNom.setText(String.valueOf(hotel.getcNom()));
+        holder.hNom.setText(String.valueOf(hotel.gethNom()));
+        holder.etoile.setRating((float) hotel.getCat());
         holder.etoile.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                holder.etoile.setRating((float)test.getCat());
+                holder.etoile.setRating((float) hotel.getCat());
             }
         });
 
-        holder.cap.setText(String.valueOf(test.getCap()));
-        holder.numCh.setText(String.valueOf(test.getNumCh()));
-        holder.adressHotel.setText(String.valueOf(test.gethAd()));
+        holder.cap.setText(String.valueOf(hotel.getCap()));
+        holder.numCh.setText(String.valueOf(hotel.getNumCh()));
+        holder.adressHotel.setText(String.valueOf(hotel.gethAd()));
 
-        holder.hphone = test.getPhone();
-        holder.hemail = test.getEmail();
+        holder.hphone = hotel.getPhone();
+        holder.hemail = hotel.getEmail();
 
 
     }
 
     @Override
     public int getItemCount() {
-        if (mTests == null) {
+        if (mHotels == null) {
             return 0;
         }
-        return mTests.size();
+        return mHotels.size();
     }
 
     public static class TestViewHolder extends RecyclerView.ViewHolder {

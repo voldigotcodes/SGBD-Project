@@ -1,10 +1,6 @@
 package com.example.sgbd;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
-public class Test {
+public class Hotel {
 
     String cNom;
     String hNom;
@@ -17,9 +13,9 @@ public class Test {
     String phone;
     String email;
 
-    public Test(){}
+    public Hotel(){}
 
-    public Test(String cNom, String hNom, double cat, int cap, int numCh, double prix, double sup, String hadresse, String phone, String email) {
+    public Hotel(String cNom, String hNom, double cat, int cap, int numCh, double prix, double sup, String hadresse, String phone, String email) {
         this.cNom = cNom;
         this.hNom = hNom;
         this.cat = cat;

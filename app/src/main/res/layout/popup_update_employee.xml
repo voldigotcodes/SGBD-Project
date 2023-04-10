@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    tools:context=".AddHotelActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:text="UPDATE EMPLOYEE"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:ems="10"
+                    android:hint="address"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/nom"
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:ems="10"
+                    android:hint="nom"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:ems="10"
+                    android:hint="email"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/sin"
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:ems="10"
+                    android:hint="Social Insurance Number (SIN)"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/roleUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:ems="10"
+                    android:hint="Role (Ex. Manager)"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/hAdresseUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:ems="10"
+                    android:hint="Hotel Adresse"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/passwordUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="71dp"
+                    android:ems="10"
+                    android:hint="Passeword"
+                    android:inputType="textPersonName" />
+
+                <Button
+                    android:id="@+id/deleteEmployee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Delete" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

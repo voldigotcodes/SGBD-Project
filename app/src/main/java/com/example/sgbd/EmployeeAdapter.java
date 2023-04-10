@@ -1,5 +1,6 @@
 package com.example.sgbd;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     @NonNull
     @Override
     public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.client_item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.employee_item_layout, parent, false);
         return new EmployeeViewHolder(view);
     }
 
@@ -32,9 +33,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         holder.nom.setText(String.valueOf(employee.getNom()));
         holder.sin.setText(String.valueOf(employee.getSin()));
-       // holder.role.setText(String.valueOf(employee.getRole()));
+        holder.role.setText(String.valueOf(employee.getRole()));
         holder.adresse.setText(String.valueOf(employee.getAdresse()));
-       // holder.hAdresse.setText(String.valueOf(employee.gethAdresse()));
+        holder.hAdresse.setText(String.valueOf(employee.gethAdresse()));
         holder.email.setText(String.valueOf(employee.getEmail()));
         holder.passeword = employee.getPasseword();
 
@@ -64,17 +65,17 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
             nom = itemView.findViewById(R.id.nomTextView);
             sin = itemView.findViewById(R.id.sinTextView);
-           // role = itemView.findViewById(R.id.roleTextView);
+            role = itemView.findViewById(R.id.roleTextView);
             adresse = itemView.findViewById(R.id.adresseTextView);
-            //hAdresse = itemView.findViewById(R.id.hadresseTextView);
+            hAdresse = itemView.findViewById(R.id.hAdresseTextView);
             email = itemView.findViewById(R.id.emailTextView);
             passeword = "";
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-
+                    EmployeeFragment.showUpdatePopup(view, nom.getText().toString(), adresse.getText().toString(), Integer.parseInt(sin.getText().toString()),
+                            hAdresse.getText().toString(), role.getText().toString(), email.getText().toString(), passeword);
                 }
             });
 

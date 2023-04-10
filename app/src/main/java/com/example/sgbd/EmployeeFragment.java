@@ -1,16 +1,35 @@
 package com.example.sgbd;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.Toast;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -92,6 +111,143 @@ public class EmployeeFragment extends Fragment {
         eRecyclerView.setAdapter(eAdapter);
         new ManageEmployeeDatabaseTask(eDataList, eAdapter).execute();
 
+        FloatingActionButton addEmployee = rootView.findViewById(R.id.addEmployeeButton);
+        addEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(rootView.getContext(), AddEmployee.class);
+                startActivity(i);
+            }
+        });
+
         return rootView;
+    }
+
+    public static void showUpdatePopup(View view, String nom,
+                                       String addy,
+                                       int sin,
+                                       String hAdresse,
+                                       String role, String email, String passeword) {
+        // Create a MaterialDatePicker object for the date range picker\
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        View dialogView = inflater.inflate(R.layout.popup_update_employee, null);
+
+
+        // Show the date range picker in a popup dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(dialogView);
+        alertDialogBuilder.setTitle("Update Employee Information");
+
+
+        EditText addressEdit = dialogView.findViewById(R.id.address);
+        EditText nomEdit = dialogView.findViewById(R.id.nom);
+        EditText emailEdit = dialogView.findViewById(R.id.email);
+        EditText sinEdit = dialogView.findViewById(R.id.sin);
+        EditText passewordEdit = dialogView.findViewById(R.id.passwordUpdate);
+        EditText hAdresseEdit = dialogView.findViewById(R.id.hAdresseUpdate);
+        EditText roleEdit = dialogView.findViewById(R.id.roleUpdate);
+        Button deleteButton = dialogView.findViewById(R.id.deleteEmployee);
+
+        addressEdit.setText(addy);
+        nomEdit.setText(nom);
+        sinEdit.setText(String.valueOf(sin));
+        hAdresseEdit.setText(hAdresse);
+        roleEdit.setText(role);
+        passewordEdit.setText(passeword);
+        emailEdit.setText(email);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DeleteEmployeeTask(sin).execute();
+                Toast.makeText(dialogView.getContext(), "You have succesfully deleted this employee, please refresh!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertDialogBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+            // if the info has been filled out correctly then send it else return a toast
+            if(!addressEdit.getText().toString().isEmpty() && !nomEdit.getText().toString().isEmpty()
+                    && !sinEdit.getText().toString().isEmpty() && !hAdresseEdit.getText().toString().isEmpty()){
+                new UpdateEmployeeTask(sin, addressEdit.getText().toString(), nomEdit.getText().toString(),
+                        Integer.parseInt(sinEdit.getText().toString()), hAdresseEdit.getText().toString(),
+                        roleEdit.getText().toString(), passewordEdit.getText().toString(), emailEdit.getText().toString()).execute();
+                Toast.makeText(dialogView.getContext(), "You succuesfully updated this employeee", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(dialogView.getContext(), "You have not filled out the form correctly", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            // Do something when the "Cancel" button is clicked
+        });
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
+
+    }
+
+    static class DeleteEmployeeTask extends AsyncTask<Void, Void, Void> {
+        int sin;
+
+
+        public DeleteEmployeeTask(int sin){
+            this.sin = sin;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Database db = new Database();
+            Connection connection = db.getConnection();
+            Statement statement = null;
+            String query = "DELETE FROM employe WHERE employe.sin_e = "+sin+"";
+            System.out.println(query);
+            try {
+                statement = connection.createStatement();
+                statement.execute(query);
+                db.getConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    static class UpdateEmployeeTask extends AsyncTask<Void, Void, Void>{
+        int oldSin;
+        String addy;
+        String nom;
+        int sin;
+        String hAdresse;
+        String role;
+        String passeword;
+        String email;
+
+        public UpdateEmployeeTask(int oldSin, String addy, String nom, int sin, String hAdresse, String role, String passeword, String email) {
+            this.oldSin = oldSin;
+            this.addy = addy;
+            this.nom = nom;
+            this.sin = sin;
+            this.hAdresse = hAdresse;
+            this.role = role;
+            this.passeword = passeword;
+            this.email = email;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Database db = new Database();
+            Connection connection = db.getConnection();
+            Statement statement = null;
+            String query = "UPDATE employe SET enom = '"+nom+"', sin_e = "+sin+", " +
+                    "hadresse = '"+hAdresse+"', role = '"+role+"', epassword = '"+passeword+"', employe_email = '"+email+"', eadresse = '"+addy+"' WHERE employe.sin_e = "+oldSin+"";
+            System.out.println(query);
+            try {
+                statement = connection.createStatement();
+                statement.execute(query);
+                db.getConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
