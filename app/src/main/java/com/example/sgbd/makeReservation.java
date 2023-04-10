@@ -58,7 +58,6 @@ public class makeReservation extends AppCompatActivity {
     public static String getAdH(){
         return adH.getText().toString();
     }
-
     public static String getArrival() {
         String arrival = arr.getText().toString(); // get the text entered by the user as a String
         return arrival;
@@ -100,12 +99,7 @@ public class makeReservation extends AppCompatActivity {
         new ReservationDatabaseTask(mDataList).execute();
         Toast toast = Toast.makeText(getApplicationContext(),"Done", Toast.LENGTH_SHORT);
         toast.show();
-        Intent intent = new Intent(getApplicationContext(), Reservation.class);
-        intent.putExtra("Adresse", makeReservation.getAdH());
-        intent.putExtra("Reservation", makeReservation.getArrival());
-        intent.putExtra("Chambre", makeReservation.getNch());
-        intent.putExtra("Reserve", makeReservation.getDate());
-        //intent.putExtra("rID", randomNumber);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
 }
@@ -165,7 +159,7 @@ public class makeReservation extends AppCompatActivity {
                         "values ("+sin + ", '"+nom+"', "+ "'"+address+"', " + "'"+date+"', " +"'"+password+"', '"+email+"')";
                 try {
                     statement =connection.createStatement();
-                    statement.execute(query0);
+                    statement.executeQuery(query0);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
