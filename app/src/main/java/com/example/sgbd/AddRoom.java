@@ -91,7 +91,7 @@ class AddRoomDatabaseTask extends AsyncTask<Void, Void, Void> {
         String inJoin = "INNER JOIN";
 
         query = "insert into chambre values" +
-                "('"+num+"',"+prix+","+capacite+",'"+vue+"',"+superficie+",'"+extansion+"','"+damage+"','"+adress+"');\n";
+                "("+num+","+prix+","+capacite+",'"+vue+"',"+superficie+",'"+extansion+"','"+damage+"','"+adress+"');\n";
 
         try {
             statement = connection.createStatement();
