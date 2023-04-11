@@ -9,10 +9,10 @@ public class Database {
 
     private final String host = "10.0.2.2";
 
-    private final String database = "postgres";
+    private final String database = "projet";
     private final int port = 5432;
     private final String user = "postgres";
-    private final String pass = "BezoutStudent02#";
+    private final String pass = "4116";
     private String url = "jdbc:postgresql://%s:%d/%s";
     private boolean status;
 
