@@ -46,6 +46,7 @@ class ClientDatabaseTask extends AsyncTask<Void, Void, List<Client>> {
     public ClientDatabaseTask(List<Client> dataList, ClientAdapter adapter) {
         mDataList = dataList;
         this.adapter = adapter;
+
     }
 
     @Override
