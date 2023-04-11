@@ -80,6 +80,7 @@ class AddClientDatabaseTask extends AsyncTask<Void, Void, Void> {
         String query = null;
         String inJoin = "INNER JOIN";
 
+
         query = "insert into client values" +
                 "('"+sin+"','"+nom+"',"+address+",'"+date+"','"+pass+"','"+email+"');\n";
 
