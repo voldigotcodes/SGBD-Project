@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/b"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Reservation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Reservation" />
+
+        <TextView
+            android:id="@+id/rID"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="ID:" />
+
+        <TextView
+            android:id="@+id/dRes"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Date de reservation:" />
+
+        <TextView
+            android:id="@+id/dReserve"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:text="date reserve:" />
+
+        <TextView
+            android:id="@+id/nc"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Numero de chambre:" />
+
+        <TextView
+            android:id="@+id/hotel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Adresse: " />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="back"
+            android:text="Back" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

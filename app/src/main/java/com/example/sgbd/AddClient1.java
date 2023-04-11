@@ -76,8 +76,10 @@ class AddClientDatabaseTask extends AsyncTask<Void, Void, Void> {
         Connection connection = db.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
+
         String query = null;
         String inJoin = "INNER JOIN";
+
 
         query = "insert into client values" +
                 "('"+sin+"','"+nom+"',"+address+",'"+date+"','"+pass+"','"+email+"');\n";

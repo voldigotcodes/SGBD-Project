@@ -19,15 +19,38 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowClients extends AppCompatActivity {
-
+public class Reservation extends AppCompatActivity {
+    public static TextView r_id, dReservation, dReserve, nch, adH;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_clients);
+        setContentView(R.layout.activity_reservation);
+        r_id = (TextView) findViewById(R.id.rID);
+        dReservation = (TextView) findViewById(R.id.dRes);
+        dReserve = (TextView) findViewById(R.id.dReserve);
+        nch = (TextView) findViewById(R.id.nc);
+        adH = (TextView) findViewById(R.id.hotel);
+
+        Intent intent = getIntent();
+       // String id = intent.getStringExtra("rId");
+        String dR = intent.getStringExtra("Reservation");
+        String dr = intent.getStringExtra("Reserve");
+        String room = intent.getStringExtra("Chambre");
+        String ad = intent.getStringExtra("Adresse");
+
+       // r_id.setText(id);
+        dReservation.setText(dR);
+        dReserve.setText(dr);
+        nch.setText(room);
+        adH.setText(ad);
+    }
+
+    public void back(View view){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
 
         mViewPager = findViewById(R.id.viewPager);
         mTabLayout = findViewById(R.id.tabs);
