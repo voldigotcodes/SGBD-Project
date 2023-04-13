@@ -82,7 +82,7 @@ class AddClientDatabaseTask extends AsyncTask<Void, Void, Void> {
 
 
         query = "insert into client values" +
-                "('"+sin+"','"+nom+"',"+address+",'"+date+"','"+pass+"','"+email+"');\n";
+                "("+sin+",'"+nom+"','"+address+"','"+date+"','"+pass+"','"+email+"');\n";
 
         try {
             statement = connection.createStatement();

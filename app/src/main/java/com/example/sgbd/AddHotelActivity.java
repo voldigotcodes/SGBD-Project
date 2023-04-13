@@ -91,7 +91,8 @@ class AddHotelDatabaseTask extends AsyncTask<Void, Void, Void> {
 
         try {
             statement = connection.createStatement();
-            statement.executeQuery(query);
+            statement.execute(query);
+            System.out.println(query);
 
         } catch (SQLException e) {
             e.printStackTrace();

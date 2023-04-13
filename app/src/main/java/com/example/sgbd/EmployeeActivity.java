@@ -249,6 +249,11 @@ public class EmployeeActivity extends AppCompatActivity {
 
     }
 
+    public void onClickManageReservation(View view){
+        Intent i = new Intent(getApplicationContext(), ManageBookings.class);
+        startActivity(i);
+    }
+
     public void onClickManagePeople(View view){
         Intent i = new Intent(getApplicationContext(), ShowClients.class);
         startActivity(i);
@@ -312,7 +317,7 @@ class UpdateHotelTask extends AsyncTask<Void, Void, Void>{
         Connection connection = db.getConnection();
         Statement statement = null;
         String query = "UPDATE hotel SET hnom = '"+nom+"', nombre_chambre = '"+nombreChambre+"', " +
-                "chaine_nom = '"+nChaine+"', etoile = '"+ratingBar2+"', hphone_number = '"+phone+"', hemail = '"+email+"', hadresse = '"+addy+"'"+" WHERE hotel.hadresse = '"+oldAddy+"'";
+                "chaine_nom = '"+nChaine+"', etoile = "+ratingBar2+", hphone_number = '"+phone+"', hemail = '"+email+"', hadresse = '"+addy+"'"+" WHERE hotel.hadresse = '"+oldAddy+"'";
         System.out.println(query);
         try {
             statement = connection.createStatement();
