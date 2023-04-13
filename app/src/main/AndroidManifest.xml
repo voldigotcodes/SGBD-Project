@@ -23,13 +23,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Managebookings"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ShowClients"
             android:exported="false">
             <meta-data
@@ -66,14 +59,7 @@
         </activity>
         <activity
             android:name=".AddEmployee"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".AddClient"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
